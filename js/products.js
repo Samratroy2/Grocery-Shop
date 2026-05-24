@@ -16,7 +16,7 @@ import {
 } from "./ui.js";
 
 // ─────────────────────────────────────────
-// Fetch from Firestore
+// Fetch products from Firestore
 // ─────────────────────────────────────────
 
 export async function fetchProducts() {
@@ -26,13 +26,16 @@ export async function fetchProducts() {
   );
 
   state.products = snap.docs.map((d) => ({
+
     id: d.id,
+
     ...d.data()
+
   }));
 }
 
 // ─────────────────────────────────────────
-// Load all products page
+// Load all products
 // ─────────────────────────────────────────
 
 export async function loadProducts() {
@@ -56,7 +59,7 @@ export async function loadProducts() {
 }
 
 // ─────────────────────────────────────────
-// Load home page products
+// Home products
 // ─────────────────────────────────────────
 
 export async function loadHomeProducts() {
@@ -65,12 +68,12 @@ export async function loadHomeProducts() {
 
   renderProductGrid(
     "home-grid",
-    state.products.slice(0, 8)
+    state.products.slice(0, 12)
   );
 }
 
 // ─────────────────────────────────────────
-// Filter by category
+// Filter category
 // ─────────────────────────────────────────
 
 export function filterCat(cat) {
@@ -82,14 +85,19 @@ export function filterCat(cat) {
   ).textContent =
     `${getCatEmoji(cat)} ${cat}`;
 
+  const filtered = state.products.filter(
+
+    (p) =>
+
+      p.category &&
+      p.category.toLowerCase() ===
+      cat.toLowerCase()
+
+  );
+
   renderProductGrid(
-
     "products-grid",
-
-    state.products.filter(
-      (p) => p.category === cat
-    )
-
+    filtered
   );
 }
 
@@ -105,6 +113,8 @@ export function sortProducts() {
 
   let sorted = [...state.products];
 
+  // Price low → high
+
   if (v === "price-asc") {
 
     sorted.sort(
@@ -112,6 +122,8 @@ export function sortProducts() {
     );
 
   }
+
+  // Price high → low
 
   if (v === "price-desc") {
 
@@ -121,10 +133,26 @@ export function sortProducts() {
 
   }
 
+  // Name A-Z
+
   if (v === "name") {
 
     sorted.sort(
-      (a, b) => a.name.localeCompare(b.name)
+
+      (a, b) =>
+
+        a.name.localeCompare(b.name)
+
+    );
+
+  }
+
+  // Stock high → low
+
+  if (v === "stock") {
+
+    sorted.sort(
+      (a, b) => b.stock - a.stock
     );
 
   }
@@ -147,7 +175,12 @@ export function doSearch() {
     .toLowerCase()
     .trim();
 
-  if (!q) return;
+  if (!q) {
+
+    loadProducts();
+
+    return;
+  }
 
   showPage("products-page");
 
@@ -155,26 +188,31 @@ export function doSearch() {
     "products-title"
   ).textContent = `🔍 "${q}"`;
 
+  const filtered = state.products.filter(
+
+    (p) =>
+
+      p.name
+        ?.toLowerCase()
+        .includes(q)
+
+      ||
+
+      p.category
+        ?.toLowerCase()
+        .includes(q)
+
+      ||
+
+      p.unit
+        ?.toLowerCase()
+        .includes(q)
+
+  );
+
   renderProductGrid(
-
     "products-grid",
-
-    state.products.filter(
-
-      (p) =>
-
-        p.name
-          .toLowerCase()
-          .includes(q)
-
-        ||
-
-        p.category
-          .toLowerCase()
-          .includes(q)
-
-    )
-
+    filtered
   );
 }
 
@@ -190,7 +228,9 @@ export function renderProductGrid(
   const grid =
     document.getElementById(gridId);
 
-  // No products
+  if (!grid) return;
+
+  // Empty state
 
   if (!prods.length) {
 
@@ -199,11 +239,22 @@ export function renderProductGrid(
       <div style="
         grid-column:1/-1;
         text-align:center;
-        padding:40px;
-        color:var(--muted)
+        padding:60px 20px;
+        color:var(--muted);
       ">
 
-        No products found 🔍
+        <div style="
+          font-size:55px;
+          margin-bottom:12px;
+        ">
+          🔍
+        </div>
+
+        <h3>No products found</h3>
+
+        <p>
+          Try another category or keyword
+        </p>
 
       </div>
 
@@ -212,7 +263,7 @@ export function renderProductGrid(
     return;
   }
 
-  // Render products
+  // Render cards
 
   grid.innerHTML = prods.map((p) => {
 
@@ -224,14 +275,18 @@ export function renderProductGrid(
 
     const disc =
       p.mrp > p.price
+
         ? Math.round(
             (1 - p.price / p.mrp) * 100
           )
+
         : 0;
 
     return `
 
       <div class="product-card">
+
+        <!-- Product Image -->
 
         <div class="prod-img">
 
@@ -260,11 +315,18 @@ export function renderProductGrid(
               : ""
           }
 
+          <!-- Wishlist -->
+
           <button
             class="wishlist-icon ${
               inWish ? "liked" : ""
             }"
-            onclick="window._toggleWish(event,'${p.id}')"
+            onclick="
+              window._toggleWish(
+                event,
+                '${p.id}'
+              )
+            "
           >
 
             ${
@@ -275,9 +337,19 @@ export function renderProductGrid(
 
           </button>
 
+          <!-- Product Photo -->
+
           <img
-            src="${p.image || 'https://via.placeholder.com/300'}"
+
+            src="${
+              p.image ||
+              'https://via.placeholder.com/300'
+            }"
+
             alt="${p.name}"
+
+            loading="lazy"
+
             style="
               width:120px;
               height:120px;
@@ -290,19 +362,50 @@ export function renderProductGrid(
 
         </div>
 
+        <!-- Product Body -->
+
         <div class="prod-body">
 
+          <!-- Category -->
+
           <div class="prod-category">
-            ${p.category}
+            ${p.category || "General"}
           </div>
+
+          <!-- Product Name -->
 
           <div class="prod-name">
             ${p.name}
           </div>
 
+          <!-- Unit -->
+
           <div class="prod-unit">
-            ${p.unit}
+            ${p.unit || ""}
           </div>
+
+          <!-- Stock -->
+
+          <div style="
+            font-size:12px;
+            color:${
+              p.stock > 0
+                ? '#16a34a'
+                : '#dc2626'
+            };
+            margin-top:4px;
+            font-weight:600;
+          ">
+
+            ${
+              p.stock > 0
+                ? `In Stock (${p.stock})`
+                : `Out of Stock`
+            }
+
+          </div>
+
+          <!-- Price Row -->
 
           <div class="prod-price-row">
 
@@ -320,7 +423,7 @@ export function renderProductGrid(
                   </span>
 
                   <span class="prod-off">
-                    ${disc}% off
+                    ${disc}% OFF
                   </span>
 
                 `
@@ -330,14 +433,37 @@ export function renderProductGrid(
 
           </div>
 
+          <!-- Buttons -->
+
           ${
-            inCart === 0
+            p.stock <= 0
 
               ? `
 
                 <button
                   class="add-btn"
-                  onclick="window._addToCart('${p.id}')"
+                  style="
+                    background:#ddd;
+                    cursor:not-allowed;
+                  "
+                  disabled
+                >
+                  Out of Stock
+                </button>
+
+              `
+
+              : inCart === 0
+
+              ? `
+
+                <button
+                  class="add-btn"
+                  onclick="
+                    window._addToCart(
+                      '${p.id}'
+                    )
+                  "
                 >
                   + Add to Cart
                 </button>
@@ -350,7 +476,12 @@ export function renderProductGrid(
 
                   <button
                     class="qty-btn"
-                    onclick="window._changeQty('${p.id}',-1)"
+                    onclick="
+                      window._changeQty(
+                        '${p.id}',
+                        -1
+                      )
+                    "
                   >
                     −
                   </button>
@@ -361,7 +492,12 @@ export function renderProductGrid(
 
                   <button
                     class="qty-btn"
-                    onclick="window._changeQty('${p.id}',1)"
+                    onclick="
+                      window._changeQty(
+                        '${p.id}',
+                        1
+                      )
+                    "
                   >
                     +
                   </button>

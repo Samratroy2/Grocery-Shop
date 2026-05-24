@@ -149,13 +149,60 @@ export async function adminSection(sec) {
 
             <select class="form-input" id="ap-cat">
               <option>Vegetables</option>
-              <option>Fruits</option>
-              <option>Dairy</option>
-              <option>Grains</option>
-              <option>Bakery</option>
-              <option>Snacks</option>
-              <option>Beverages</option>
-              <option>Spices</option>
+                <option>Fruits</option>
+                <option>Grains</option>
+                <option>Rice & Atta</option>
+                <option>Pulses & Dal</option>
+                <option>Snacks</option>
+                <option>Biscuits</option>
+                <option>Namkeen</option>
+                <option>Spices</option>
+                <option>Masala</option>
+                <option>Soft Drinks</option>
+                <option>Juice</option>
+                <option>Tea & Coffee</option>
+                <option>Dairy</option>
+                <option>Milk</option>
+                <option>Curd</option>
+                <option>Paneer</option>
+                <option>Bakery</option>
+                <option>Bread</option>
+                <option>Cakes</option>
+                <option>Oil</option>
+                <option>Ghee</option>
+                <option>Sugar</option>
+                <option>Salt</option>
+                <option>Soap</option>
+                <option>Shampoo</option>
+                <option>Hair Oil</option>
+                <option>Toothpaste</option>
+                <option>Detergent</option>
+                <option>Cleaning Items</option>
+                <option>Bathroom Cleaner</option>
+                <option>Floor Cleaner</option>
+                <option>Cow Food</option>
+                <option>Animal Feed</option>
+                <option>Cement</option>
+                <option>Rod</option>
+                <option>Paint</option>
+                <option>Hardware</option>
+                <option>Electrical</option>
+                <option>Pipe & Plumbing</option>
+                <option>Kitchen Items</option>
+                <option>Plastic Items</option>
+                <option>Stationery</option>
+                <option>Baby Care</option>
+                <option>Personal Care</option>
+                <option>Frozen Food</option>
+                <option>Dry Fruits</option>
+                <option>Pickles</option>
+                <option>Sauces</option>
+                <option>Noodles</option>
+                <option>Ready to Eat</option>
+                <option>Ice Cream</option>
+                <option>Pet Food</option>
+                <option>Mobile Accessories</option>
+                <option>Other</option>
             </select>
           </div>
 
