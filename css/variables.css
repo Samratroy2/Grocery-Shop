@@ -1,0 +1,54 @@
+/* ─────────────────────────────────────────
+   variables.css  —  Design tokens & reset
+   ───────────────────────────────────────── */
+
+:root {
+  /* Brand Colors */
+  --green:        #1a7a4a;
+  --green-light:  #23a460;
+  --green-dark:   #0f5233;
+
+  /* Accent */
+  --amber:        #f59e0b;
+  --amber-light:  #fcd34d;
+
+  /* Status */
+  --red:          #ef4444;
+  --blue:         #3b82f6;
+
+  /* Surface */
+  --bg:           #f7f9f5;
+  --white:        #ffffff;
+  --card:         #ffffff;
+
+  /* Typography */
+  --text:         #1c2614;
+  --muted:        #6b7c61;
+
+  /* Border */
+  --border:       #dde8d5;
+
+  /* Shadows */
+  --shadow:       0 2px 12px rgba(26, 122, 74, 0.08);
+  --shadow-hover: 0 8px 32px rgba(26, 122, 74, 0.18);
+
+  /* Radius */
+  --radius:    12px;
+  --radius-sm:  8px;
+}
+
+/* ── Reset ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}

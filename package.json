@@ -1,0 +1,13 @@
+{
+  "name": "freshmart",
+  "version": "1.0.0",
+  "description": "FreshMart — Premium Grocery Store",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve . --listen 3000 --no-clipboard",
+    "dev": "npx serve . --listen 3000"
+  },
+  "keywords": ["grocery", "ecommerce", "firebase"],
+  "author": "",
+  "license": "MIT"
+}
