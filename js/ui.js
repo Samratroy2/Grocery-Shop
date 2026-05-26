@@ -2,48 +2,91 @@
 // ui.js  —  Toast, navigation, helpers
 // ─────────────────────────────────────────
 
-// ── Page navigation ──────────────────────
+// ─────────────────────────────────────────
+// Page navigation
+// ─────────────────────────────────────────
 
 export function showPage(id) {
-  document.querySelectorAll(".page").forEach((p) => p.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-  window.scrollTo(0, 0);
+
+  document
+    .querySelectorAll(".page")
+    .forEach((p) =>
+      p.classList.remove("active")
+    );
+
+  const page =
+    document.getElementById(id);
+
+  if (page) {
+
+    page.classList.add("active");
+
+  }
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
 }
 
-// ── Toast notifications ──────────────────
+// ─────────────────────────────────────────
+// Toast notifications
+// ─────────────────────────────────────────
 
-export function showToast(msg, type = "") {
-  const t = document.getElementById("toast");
+export function showToast(
+  msg,
+  type = ""
+) {
+
+  const t =
+    document.getElementById("toast");
+
+  if (!t) return;
+
   t.textContent = msg;
-  t.className = type === "error" ? "error-toast show" : "show";
-  setTimeout(() => (t.className = ""), 2600);
+
+  t.className =
+    type === "error"
+      ? "error-toast show"
+      : "show";
+
+  setTimeout(() => {
+
+    t.className = "";
+
+  }, 2600);
 }
 
-// ── Cart Drawer ──────────────────────────
+// ─────────────────────────────────────────
+// Cart Drawer
+// ─────────────────────────────────────────
 
 export function openDrawer() {
-  document.getElementById("cart-drawer").classList.add("open");
-  document.getElementById("drawer-overlay").classList.add("open");
+
+  document
+    .getElementById("cart-drawer")
+    ?.classList.add("open");
+
+  document
+    .getElementById("drawer-overlay")
+    ?.classList.add("open");
 }
 
 export function closeDrawer() {
-  document.getElementById("cart-drawer").classList.remove("open");
-  document.getElementById("drawer-overlay").classList.remove("open");
+
+  document
+    .getElementById("cart-drawer")
+    ?.classList.remove("open");
+
+  document
+    .getElementById("drawer-overlay")
+    ?.classList.remove("open");
 }
 
-// ── Category emoji map ───────────────────
+// ─────────────────────────────────────────
+// Category label (no emoji)
+// ─────────────────────────────────────────
 
-export function getCatEmoji(cat) {
-  return (
-    {
-      Vegetables: "🥦",
-      Fruits:     "🍎",
-      Dairy:      "🥛",
-      Grains:     "🌾",
-      Bakery:     "🍞",
-      Snacks:     "🍿",
-      Beverages:  "🧃",
-      Spices:     "🌶️",
-    }[cat] || "🛒"
-  );
+export function getCatLabel(cat) {
+  return cat || "General";
 }

@@ -115,11 +115,41 @@ export function initAuthListener() {
       try {
         const snap = await getDoc(doc(db, "users", user.uid));
         if (snap.exists()) {
-          const d        = snap.data();
-          state.cart     = d.cart     || {};
-          state.wishlist = d.wishlist || [];
-          if (d.role === "admin") adminLink.style.display = "block";
+          const d = snap.data();
+
+          state.cart =
+            d.cart || {};
+
+          state.wishlist =
+            d.wishlist || {};
+
+          if (d.role === "admin") {
+
+            adminLink.style.display =
+              "block";
+
+          }
+
+          // Refresh cart
+
           refreshCartUI();
+
+          // Re-render cart page
+          // after cart restore
+
+          const activePage =
+            localStorage.getItem(
+              "activePage"
+            );
+
+          if (
+            activePage ===
+            "cart-page"
+          ) {
+
+            window._renderCartPage();
+
+          }
         }
       } catch (e) {
         console.error("Auth state load error:", e);

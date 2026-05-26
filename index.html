@@ -1,151 +1,570 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Roy Shop -Grocery Store</title>
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
 
-  <!-- CSS Modules -->
-  <link rel="stylesheet" href="css/variables.css"/>
-  <link rel="stylesheet" href="css/navbar.css"/>
-  <link rel="stylesheet" href="css/home.css"/>
-  <link rel="stylesheet" href="css/products.css"/>
-  <link rel="stylesheet" href="css/cart.css"/>
-  <link rel="stylesheet" href="css/auth.css"/>
-  <link rel="stylesheet" href="css/responsive.css"/>
+  <title>
+    Roy Shop - Grocery Store
+  </title>
+
+  <!-- GOOGLE FONTS -->
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- CSS FILES -->
+
+  <!-- VARIABLES -->
+  <link
+    rel="stylesheet"
+    href="css/variables.css?v=1"
+  />
+
+  <!-- MAIN LAYOUT -->
+  <link
+    rel="stylesheet"
+    href="css/navbar.css?v=1"
+  />
+
+  <link
+    rel="stylesheet"
+    href="css/home.css?v=1"
+  />
+
+  <link
+    rel="stylesheet"
+    href="css/products.css?v=1"
+  />
+
+  <link
+    rel="stylesheet"
+    href="css/cart.css?v=1"
+  />
+
+  <link
+    rel="stylesheet"
+    href="css/auth.css?v=1"
+  />
+
+  <!-- RESPONSIVE LAST -->
+  <link
+    rel="stylesheet"
+    href="css/responsive.css?v=1"
+  />
+
+  <!-- ADMIN -->
+  <link rel="stylesheet" href="css/admin.css?v=1" />
+
+  <!-- ORDERS -->
+   <link rel="stylesheet" href="css/orders.css?v=1"/>
+
 </head>
+
 <body>
 
-  <!-- ─── NAVBAR ─── -->
+  <!-- NAVBAR -->
+
   <nav>
+
     <div class="nav-top">
-      <div class="logo">Roy <span>Shop</span></div>
+
+      <div class="logo">
+        Roy <span>Shop</span>
+      </div>
+
       <div class="search-wrap">
-        <input id="search-input" type="text" placeholder="Search vegetables, fruits, grocery..."/>
-        <button onclick="doSearch()">🔍</button>
+
+        <input
+          id="search-input"
+          type="text"
+          placeholder="Search grocery products..."
+        />
+
+        <button onclick="doSearch()">
+          Search
+        </button>
+
       </div>
+
       <div class="nav-right">
-        <button class="nav-btn" id="auth-nav-btn" onclick="openAuth()">
-          👤 <span id="auth-nav-label">Login</span>
+
+        <button
+          class="nav-btn"
+          id="auth-nav-btn"
+          onclick="openAuth()"
+        >
+
+          <span id="auth-nav-label">
+            Login
+          </span>
+
         </button>
-        <button class="nav-btn" onclick="openDrawer()">
-          🛒 Cart <span class="cart-badge" id="cart-badge">0</span>
+
+        <button
+          class="nav-btn"
+          onclick="openDrawer()"
+        >
+
+          Cart
+
+          <span
+            class="cart-badge"
+            id="cart-badge"
+          >
+            0
+          </span>
+
         </button>
+
       </div>
+
     </div>
+
+    <!-- Category Nav -->
 
     <div class="nav-secondary">
+
       <div class="nav-cats">
-        <button class="nav-cat-btn active" onclick="goHome()">🏠 Home</button>
-        <button class="nav-cat-btn" onclick="showPage('products-page');loadProducts()">🥦 All Products</button>
-        <button class="nav-cat-btn" onclick="filterCat('Vegetables')">🥕 Vegetables</button>
-        <button class="nav-cat-btn" onclick="filterCat('Fruits')">🍎 Fruits</button>
-        <button class="nav-cat-btn" onclick="filterCat('Dairy')">🥛 Dairy</button>
-        <button class="nav-cat-btn" onclick="filterCat('Grains')">🌾 Grains</button>
-        <button class="nav-cat-btn" onclick="filterCat('Bakery')">🍞 Bakery</button>
-        <button class="nav-cat-btn" onclick="filterCat('Snacks')">🍿 Snacks</button>
-        <button class="nav-cat-btn" onclick="showPage('orders-page');loadOrders()">📦 My Orders</button>
-        <button class="nav-cat-btn" id="admin-nav-link" style="display:none"
-          onclick="showPage('admin-page');loadAdmin()">⚙️ Admin</button>
-      </div>
+
+  <button
+    class="nav-cat-btn active"
+    onclick="
+      setActiveNav('Home');
+      goHome();
+    "
+  >
+    Home
+  </button>
+
+  <button
+    class="nav-cat-btn"
+    onclick="loadProducts()"
+  >
+    All Products
+  </button>
+
+  <button
+    class="nav-cat-btn"
+    onclick="
+      setActiveNav('Fresh Food');
+      filterCat('Fresh Food');
+    "
+  >
+    Fresh Food
+  </button>
+
+  <button
+    class="nav-cat-btn"
+    onclick="
+      setActiveNav('Packaged Foods');
+      filterCat('Packaged & Dry Foods');
+    "
+  >
+    Packaged Foods
+  </button>
+
+  <button
+    class="nav-cat-btn"
+    onclick="
+      setActiveNav('Beverages');
+      filterCat('Beverages');
+    "
+  >
+    Beverages
+  </button>
+
+  <button
+    class="nav-cat-btn"
+    onclick="
+      setActiveNav('Household');
+      filterCat('Household Essentials');
+    "
+  >
+    Household
+  </button>
+
+  <button
+    class="nav-cat-btn"
+    onclick="
+      setActiveNav('Personal Care');
+      filterCat('Baby & Personal Care');
+    "
+  >
+    Personal Care
+  </button>
+
+  <button
+    class="nav-cat-btn"
+    onclick="
+      setActiveNav('Other Items');
+      filterCat('Other Common Items');
+    "
+  >
+    Other Items
+  </button>
+
+  <button
+    class="nav-cat-btn"
+    onclick="
+      setActiveNav('My Orders');
+      showPage('orders-page');
+      loadOrders();
+    "
+  >
+    My Orders
+  </button>
+
+  <button
+    class="nav-cat-btn"
+    id="admin-nav-link"
+    style="display:none"
+    onclick="
+      setActiveNav('Admin');
+      showPage('admin-page');
+      loadAdmin();
+    "
+  >
+    Admin
+  </button>
+
+</div>
+
     </div>
+
   </nav>
 
-  <!-- ─── PAGE: HOME ─── -->
+  <!-- HOME PAGE -->
+
   <div class="page active" id="home-page">
+
+    <!-- Hero -->
+
     <div class="hero">
+
       <div class="hero-text">
-        <h1>Fresh from<br><span>Farm to Table</span></h1>
-        <p>Organic, fresh groceries delivered in 2 hours</p>
-        <button class="hero-cta" onclick="showPage('products-page');loadProducts()">Shop Now →</button>
+
+        <h1>
+          Fresh Products For Your Home
+        </h1>
+
+        <p>
+          Grocery, beverages, household essentials
+          and personal care products delivered fast.
+        </p>
+
+        <button
+          class="hero-cta"
+          onclick="loadProducts()"
+        >
+          Shop Now
+        </button>
+
       </div>
-      <div class="hero-visual">🥦</div>
-      <div class="hero-deco">🛒</div>
+
     </div>
+
+    <!-- Offers -->
 
     <div class="offers-strip">
-      <div class="offer-card"><div class="offer-icon">🚚</div><div><h3>Free Delivery</h3><p>On orders above ₹499</p></div></div>
-      <div class="offer-card"><div class="offer-icon">⏱️</div><div><h3>2-Hour Delivery</h3><p>Express slots available</p></div></div>
-      <div class="offer-card"><div class="offer-icon">🌿</div><div><h3>100% Organic</h3><p>Certified fresh produce</p></div></div>
+
+      <div class="offer-card">
+
+        <div>
+
+          <h3>Free Delivery</h3>
+
+          <p>
+            On orders above ₹499
+          </p>
+
+        </div>
+
+      </div>
+
+      <div class="offer-card">
+
+        <div>
+
+          <h3>Fast Delivery</h3>
+
+          <p>
+            Express slots available
+          </p>
+
+        </div>
+
+      </div>
+
+      <div class="offer-card">
+
+        <div>
+
+          <h3>Fresh Products</h3>
+
+          <p>
+            Quality grocery products
+          </p>
+
+        </div>
+
+      </div>
+
     </div>
+
+    <!-- Today's Deals -->
 
     <div class="section-row">
-      <h2 class="section-title">🔥 Today's Deals</h2>
-      <button class="see-all" onclick="showPage('products-page');loadProducts()">See All →</button>
-    </div>
-    <div class="product-grid" id="home-grid"><div class="loader">⏳</div></div>
 
-    <div class="section-row" style="margin-top:16px">
-      <h2 class="section-title">🛍️ Shop by Category</h2>
+      <h2 class="section-title">
+        Today's Deals
+      </h2>
+
+      <button
+        class="see-all"
+        onclick="loadProducts()"
+      >
+        See All
+      </button>
+
     </div>
+
+    <div
+      class="product-grid"
+      id="home-grid"
+    >
+      <div class="loader">
+        Loading...
+      </div>
+    </div>
+
+    <!-- Categories -->
+
+    <div
+      class="section-row"
+      style="margin-top:16px"
+    >
+
+      <h2 class="section-title">
+        Shop by Category
+      </h2>
+
+    </div>
+
     <div class="cat-grid">
-      <div class="cat-tile" onclick="filterCat('Vegetables')"><div class="icon">🥦</div><div class="name">Vegetables</div></div>
-      <div class="cat-tile" onclick="filterCat('Fruits')"><div class="icon">🍎</div><div class="name">Fruits</div></div>
-      <div class="cat-tile" onclick="filterCat('Dairy')"><div class="icon">🥛</div><div class="name">Dairy</div></div>
-      <div class="cat-tile" onclick="filterCat('Grains')"><div class="icon">🌾</div><div class="name">Grains</div></div>
-      <div class="cat-tile" onclick="filterCat('Bakery')"><div class="icon">🍞</div><div class="name">Bakery</div></div>
-      <div class="cat-tile" onclick="filterCat('Snacks')"><div class="icon">🍿</div><div class="name">Snacks</div></div>
-      <div class="cat-tile" onclick="filterCat('Beverages')"><div class="icon">🧃</div><div class="name">Beverages</div></div>
-      <div class="cat-tile" onclick="filterCat('Spices')"><div class="icon">🌶️</div><div class="name">Spices</div></div>
+
+      <div
+        class="cat-tile"
+        onclick="filterCat('Fresh Food')"
+      >
+
+        <div class="name">
+          Fresh Food
+        </div>
+
+      </div>
+
+      <div
+        class="cat-tile"
+        onclick="filterCat('Packaged & Dry Foods')"
+      >
+
+        <div class="name">
+          Packaged Foods
+        </div>
+
+      </div>
+
+      <div
+        class="cat-tile"
+        onclick="filterCat('Beverages')"
+      >
+
+        <div class="name">
+          Beverages
+        </div>
+
+      </div>
+
+      <div
+        class="cat-tile"
+        onclick="filterCat('Household Essentials')"
+      >
+
+        <div class="name">
+          Household Essentials
+        </div>
+
+      </div>
+
+      <div
+        class="cat-tile"
+        onclick="filterCat('Baby & Personal Care')"
+      >
+
+        <div class="name">
+          Personal Care
+        </div>
+
+      </div>
+
+      <div
+        class="cat-tile"
+        onclick="filterCat('Other Common Items')"
+      >
+
+        <div class="name">
+          Other Items
+        </div>
+
+      </div>
+
     </div>
+
   </div>
 
-  <!-- ─── PAGE: ALL PRODUCTS ─── -->
+  <!-- PRODUCTS PAGE -->
+
   <div class="page" id="products-page">
+
     <div class="section-row">
-      <h2 class="section-title" id="products-title">All Products</h2>
-      <select id="sort-select" onchange="sortProducts()"
-        style="padding:7px 12px;border:1px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;">
-        <option value="">Sort by</option>
-        <option value="price-asc">Price: Low to High</option>
-        <option value="price-desc">Price: High to Low</option>
-        <option value="name">Name A-Z</option>
+
+      <h2
+        class="section-title"
+        id="products-title"
+      >
+        All Products
+      </h2>
+
+      <select
+        id="sort-select"
+        onchange="sortProducts()"
+        style="
+          padding:7px 12px;
+          border:1px solid var(--border);
+          border-radius:8px;
+          font-family:'DM Sans',sans-serif;
+          font-size:13px;
+          outline:none;
+        "
+      >
+
+        <option value="">
+          Sort by
+        </option>
+
+        <option value="price-asc">
+          Price: Low to High
+        </option>
+
+        <option value="price-desc">
+          Price: High to Low
+        </option>
+
+        <option value="name">
+          Name A-Z
+        </option>
+
       </select>
+
     </div>
-    <div class="product-grid" id="products-grid"><div class="loader">⏳</div></div>
+
+    <div
+      class="product-grid"
+      id="products-grid"
+    >
+
+      <div class="loader">
+        Loading...
+      </div>
+
+    </div>
+
   </div>
 
-  <!-- ─── PAGE: CART ─── -->
+  <!-- CART PAGE -->
+
   <div class="page" id="cart-page">
 
-    <h2 class="section-title" style="margin-bottom:20px">
-      🛒 My Cart
+    <h2
+      class="section-title"
+      style="margin-bottom:20px"
+    >
+      My Cart
     </h2>
 
     <div class="cart-layout">
-
-      <!-- Cart Items -->
 
       <div
         class="cart-items-panel"
         id="cart-items-panel"
       ></div>
 
-      <!-- Summary -->
-
       <div class="summary-panel">
 
-        <h3>Price Summary</h3>
+        <h3>
+          Price Summary
+        </h3>
 
         <div class="summary-row">
+
           <span>MRP Total</span>
-          <span id="sum-mrp">₹0</span>
+
+          <span id="sum-mrp">
+            ₹0
+          </span>
+
         </div>
 
         <div
-          class="summary-row"
-          style="color:var(--red)"
-        >
-          <span>Discount</span>
-          <span id="sum-disc">-₹0</span>
-        </div>
+  class="summary-row"
+  id="discount-toggle"
+  onclick="toggleDiscountDetails()"
+  style="
+    color:var(--red);
+    cursor:pointer;
+  "
+>
+
+  <span>
+    Discount Details
+  </span>
+
+  <span id="sum-disc">
+    -₹0
+  </span>
+
+</div>
+
+<div
+  id="discount-details"
+  style="
+    display:none;
+    margin-top:8px;
+    padding:10px;
+    background:#f8f8f8;
+    border-radius:10px;
+    font-size:13px;
+    color:#555;
+    line-height:1.7;
+  "
+></div>
 
         <div class="summary-row">
+
           <span>Delivery</span>
-          <span id="sum-del">₹40</span>
+
+          <span id="sum-del">
+            ₹40
+          </span>
+
         </div>
 
         <div class="summary-row total">
@@ -161,14 +580,6 @@
 
         </div>
 
-        <!-- Savings -->
-
-        <div
-          class="savings-pill"
-          id="savings-pill"
-          style="display:none"
-        ></div>
-
         <!-- Promo -->
 
         <div class="promo-row">
@@ -176,16 +587,21 @@
           <input
             type="text"
             id="promo-input"
-            placeholder="Promo code (FRESH20)"
+            placeholder="Promo code"
           />
 
-          <button onclick="applyPromo()">
+          <button
+            id="apply-promo-btn"
+            onclick="applyPromo()"
+          >
             Apply
           </button>
 
         </div>
 
-        <!-- Payment Section -->
+        <div id="applied-promo-box"></div>
+
+        <!-- Payment -->
 
         <div
           id="payment-methods"
@@ -206,7 +622,7 @@
               margin-bottom:12px;
             ">
 
-              💵 Payment Method
+              Payment Method
 
             </div>
 
@@ -225,36 +641,20 @@
                 disabled
               />
 
-              Cash on Delivery (COD)
+              Cash on Delivery
 
             </label>
-
-            <div style="
-              border-top:1px dashed #ccc;
-              padding-top:10px;
-              color:#666;
-              font-size:13px;
-              line-height:1.7;
-            ">
-
-              🟡 UPI Payments — Coming Soon<br/>
-              🟡 Credit / Debit Cards — Coming Soon<br/>
-              🟡 Wallet Payments — Coming Soon
-
-            </div>
 
           </div>
 
         </div>
-
-        <!-- Place Order -->
 
         <button
           class="place-order-btn"
           onclick="placeOrder()"
         >
 
-          Place COD Order 🌿
+          Place Order
 
         </button>
 
@@ -264,96 +664,343 @@
 
   </div>
 
-  <!-- ─── PAGE: ORDERS ─── -->
+  <!-- ORDERS PAGE -->
+
   <div class="page" id="orders-page">
-    <h2 class="section-title" style="margin-bottom:20px">📦 My Orders</h2>
-    <div id="orders-list"><div class="loader">⏳</div></div>
+
+    <h2
+      class="section-title"
+      style="margin-bottom:20px"
+    >
+      My Orders
+    </h2>
+
+    <div id="orders-list">
+
+      <div class="loader">
+        Loading...
+      </div>
+
+    </div>
+
   </div>
 
-  <!-- ─── PAGE: PROFILE ─── -->
+  <!-- PROFILE PAGE -->
+
   <div class="page" id="profile-page">
-    <h2 class="section-title" style="margin-bottom:20px">👤 My Account</h2>
+
+    <h2
+      class="section-title"
+      style="margin-bottom:20px"
+    >
+      My Account
+    </h2>
+
     <div class="profile-layout">
+
       <div class="profile-sidebar">
-        <div class="profile-avatar" id="profile-avatar">👤</div>
-        <div class="profile-name"  id="profile-name">—</div>
-        <div class="profile-email" id="profile-email">—</div>
+
+        <div
+          class="profile-avatar"
+          id="profile-avatar"
+        >
+          User
+        </div>
+
+        <div
+          class="profile-name"
+          id="profile-name"
+        >
+          —
+        </div>
+
+        <div
+          class="profile-email"
+          id="profile-email"
+        >
+          —
+        </div>
+
         <div class="profile-menu">
-          <button class="active" onclick="profileTab('info')">📋 Personal Info</button>
-          <button onclick="profileTab('address')">📍 Addresses</button>
-          <button onclick="profileTab('wishlist')">❤️ Wishlist</button>
-          <button onclick="signOut()" style="color:var(--red);margin-top:20px">🚪 Logout</button>
+
+          <button
+            class="active"
+            onclick="profileTab('info')"
+          >
+            Personal Info
+          </button>
+
+          <button
+            onclick="profileTab('address')"
+          >
+            Addresses
+          </button>
+
+          <button
+            onclick="profileTab('wishlist')"
+          >
+            Wishlist
+          </button>
+
+          <button
+            onclick="signOut()"
+            style="
+              color:var(--red);
+              margin-top:20px
+            "
+          >
+            Logout
+          </button>
+
         </div>
+
       </div>
-      <div class="profile-content" id="profile-content"></div>
+
+      <div
+        class="profile-content"
+        id="profile-content"
+      ></div>
+
     </div>
+
   </div>
 
-  <!-- ─── PAGE: ADMIN ─── -->
+  <!-- ADMIN PAGE -->
+
   <div class="page" id="admin-page">
+
     <div class="admin-wrap">
+
       <div class="admin-sidebar">
-        <div style="padding:16px 20px;color:#fff;font-family:'Playfair Display',serif;font-size:18px;font-weight:700;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:8px;">⚙️ Admin</div>
-        <h3>Dashboard</h3>
-        <button class="admin-nav-btn active" onclick="adminSection('dashboard')">📊 Overview</button>
-        <h3>Catalog</h3>
-        <button class="admin-nav-btn" onclick="adminSection('add-product')">➕ Add Product</button>
-        <button class="admin-nav-btn" onclick="adminSection('manage-products')">📦 Manage Products</button>
-        <h3>Operations</h3>
-        <button class="admin-nav-btn" onclick="adminSection('manage-orders')">🛒 Orders</button>
-        <button class="admin-nav-btn" onclick="adminSection('customers')">👥 Customers</button>
-      </div>
-      <div class="admin-main" id="admin-main"></div>
-    </div>
-  </div>
 
-  <!-- ─── CART DRAWER ─── -->
-  <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
-  <div class="cart-drawer" id="cart-drawer">
-    <div class="drawer-head">
-      <h2>🛒 Cart</h2>
-      <button class="drawer-close" onclick="closeDrawer()">✕</button>
-    </div>
-    <div class="drawer-body" id="drawer-body"></div>
-    <div class="drawer-footer">
-      <div class="drawer-total"><span>Total</span><span id="drawer-total-val">₹0</span></div>
-      <button class="drawer-checkout"
-        onclick="closeDrawer();showPage('cart-page');renderCartPage()">Go to Cart →</button>
-    </div>
-  </div>
+        <div style="
+          padding:16px 20px;
+          color:#fff;
+          font-family:'Playfair Display',serif;
+          font-size:18px;
+          font-weight:700;
+          border-bottom:1px solid rgba(255,255,255,.1);
+          margin-bottom:8px;
+        ">
 
-  <!-- ─── AUTH MODAL ─── -->
-  <div class="modal-bg" id="modal-bg">
-    <div class="auth-modal">
-      <button class="auth-close" onclick="closeAuth()">✕</button>
-      <div class="auth-left">
-        <h2>Welcome to FreshMart</h2>
-        <p>Your one-stop shop for fresh, organic groceries delivered to your door</p>
-        <div class="feature"><span>🥦</span> Farm-fresh produce</div>
-        <div class="feature"><span>🚚</span> 2-hour delivery</div>
-        <div class="feature"><span>💳</span> Secure payments</div>
-        <div class="feature"><span>🌿</span> 100% organic</div>
-      </div>
-      <div class="auth-right">
-        <h3 id="auth-title">Sign In</h3>
-        <p  id="auth-sub">Welcome back! Please sign in.</p>
-        <div class="auth-msg" id="auth-msg"></div>
-        <input class="auth-input" type="text"     id="auth-name"  placeholder="Full Name" style="display:none"/>
-        <input class="auth-input" type="email"    id="auth-email" placeholder="Email address"/>
-        <input class="auth-input" type="password" id="auth-pass"  placeholder="Password"/>
-        <button class="auth-submit" onclick="handleAuth()" id="auth-submit-btn">Sign In</button>
-        <div class="auth-switch" id="auth-switch">
-          New user? <a onclick="window._toggleAuthMode()">Create account</a>
+          Admin Panel
+
         </div>
+
+        <h3>Dashboard</h3>
+
+        <button
+          class="admin-nav-btn active"
+          onclick="adminSection('dashboard')"
+        >
+          Overview
+        </button>
+
+        <h3>Catalog</h3>
+
+        <button
+          class="admin-nav-btn"
+          onclick="adminSection('add-product')"
+        >
+          Add Product
+        </button>
+
+        <button
+          class="admin-nav-btn"
+          onclick="adminSection('manage-products')"
+        >
+          Manage Products
+        </button>
+
+        <h3>Operations</h3>
+
+        <button
+          class="admin-nav-btn"
+          onclick="adminSection('manage-orders')"
+        >
+          Orders
+        </button>
+
+        <button
+          class="admin-nav-btn"
+          onclick="adminSection('customers')"
+        >
+          Customers
+        </button>
+
       </div>
+
+      <div
+        class="admin-main"
+        id="admin-main"
+      ></div>
+
     </div>
+
   </div>
 
-  <!-- ─── TOAST ─── -->
+  <!-- CART DRAWER -->
+
+  <div
+    class="drawer-overlay"
+    id="drawer-overlay"
+    onclick="closeDrawer()"
+  ></div>
+
+  <div
+    class="cart-drawer"
+    id="cart-drawer"
+  >
+
+    <div class="drawer-head">
+
+      <h2>Cart</h2>
+
+      <button
+        class="drawer-close"
+        onclick="closeDrawer()"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <div
+      class="drawer-body"
+      id="drawer-body"
+    ></div>
+
+    <div class="drawer-footer">
+
+      <div class="drawer-total">
+
+        <span>Total</span>
+
+        <span id="drawer-total-val">
+          ₹0
+        </span>
+
+      </div>
+
+      <button
+        class="drawer-checkout"
+        onclick="
+          closeDrawer();
+          showPage('cart-page');
+          renderCartPage();
+        "
+      >
+
+        Go to Cart
+
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- AUTH MODAL -->
+
+  <div
+    class="modal-bg"
+    id="modal-bg"
+  >
+
+    <div class="auth-modal">
+
+      <button
+        class="auth-close"
+        onclick="closeAuth()"
+      >
+        ×
+      </button>
+
+      <div class="auth-left">
+
+        <h2>
+          Welcome to Roy Shop
+        </h2>
+
+        <p>
+          Grocery and household products
+          delivered to your home.
+        </p>
+
+      </div>
+
+      <div class="auth-right">
+
+        <h3 id="auth-title">
+          Sign In
+        </h3>
+
+        <p id="auth-sub">
+          Welcome back! Please sign in.
+        </p>
+
+        <div
+          class="auth-msg"
+          id="auth-msg"
+        ></div>
+
+        <input
+          class="auth-input"
+          type="text"
+          id="auth-name"
+          placeholder="Full Name"
+          style="display:none"
+        />
+
+        <input
+          class="auth-input"
+          type="email"
+          id="auth-email"
+          placeholder="Email address"
+        />
+
+        <input
+          class="auth-input"
+          type="password"
+          id="auth-pass"
+          placeholder="Password"
+        />
+
+        <button
+          class="auth-submit"
+          onclick="handleAuth()"
+          id="auth-submit-btn"
+        >
+          Sign In
+        </button>
+
+        <div
+          class="auth-switch"
+          id="auth-switch"
+        >
+
+          New user?
+          <a onclick="window._toggleAuthMode()">
+            Create account
+          </a>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- TOAST -->
+
   <div id="toast"></div>
 
-  <!-- ─── App entry (ES module) ─── -->
-  <script type="module" src="js/app.js"></script>
+  <!-- APP -->
+
+  <script
+    type="module"
+    src="js/app.js"
+  ></script>
 
 </body>
 </html>

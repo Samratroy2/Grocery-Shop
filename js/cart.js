@@ -25,8 +25,6 @@ export async function addToCart(id) {
     (x) => x.id === id
   );
 
-  // Product check
-
   if (!product) {
 
     showToast(
@@ -36,8 +34,6 @@ export async function addToCart(id) {
 
     return;
   }
-
-  // Stock check
 
   if (
     product.stock !== undefined &&
@@ -52,20 +48,14 @@ export async function addToCart(id) {
     return;
   }
 
-  // Add locally
-
   state.cart[id] =
     (state.cart[id] || 0) + 1;
-
-  // Reduce stock locally
 
   if (product.stock !== undefined) {
 
     product.stock -= 1;
 
   }
-
-  // Update Firebase stock
 
   try {
 
@@ -88,10 +78,8 @@ export async function addToCart(id) {
   refreshCartUI();
 
   showToast(
-    `🛒 ${product.name} added`
+    `${product.name} added to cart`
   );
-
-  // Save cart
 
   if (state.currentUser) {
 
@@ -102,7 +90,7 @@ export async function addToCart(id) {
 }
 
 // ─────────────────────────────────────────
-// Change quantity
+// Change Quantity
 // ─────────────────────────────────────────
 
 export async function changeQty(id, delta) {
@@ -116,11 +104,7 @@ export async function changeQty(id, delta) {
   const current =
     state.cart[id] || 0;
 
-  // Increase qty
-
   if (delta > 0) {
-
-    // Stock check
 
     if (
       product.stock !== undefined &&
@@ -135,20 +119,14 @@ export async function changeQty(id, delta) {
       return;
     }
 
-    // Increase locally
-
     state.cart[id] =
       current + delta;
-
-    // Reduce stock locally
 
     if (product.stock !== undefined) {
 
       product.stock -= delta;
 
     }
-
-    // Firebase update
 
     try {
 
@@ -170,14 +148,10 @@ export async function changeQty(id, delta) {
 
   }
 
-  // Decrease qty
-
   else {
 
     const removeQty =
       Math.abs(delta);
-
-    // Restore stock locally
 
     if (product.stock !== undefined) {
 
@@ -185,12 +159,8 @@ export async function changeQty(id, delta) {
 
     }
 
-    // Decrease cart qty
-
     state.cart[id] =
       current - removeQty;
-
-    // Firebase restore stock
 
     try {
 
@@ -210,8 +180,6 @@ export async function changeQty(id, delta) {
 
     }
 
-    // Remove item fully
-
     if (state.cart[id] <= 0) {
 
       delete state.cart[id];
@@ -222,8 +190,6 @@ export async function changeQty(id, delta) {
 
   refreshCartUI();
 
-  // Save cart
-
   if (state.currentUser) {
 
     saveCart();
@@ -233,7 +199,7 @@ export async function changeQty(id, delta) {
 }
 
 // ─────────────────────────────────────────
-// Save cart to Firebase
+// Save Cart
 // ─────────────────────────────────────────
 
 export async function saveCart() {
@@ -291,8 +257,6 @@ export function refreshCartUI() {
 
   }, 0);
 
-  // Badge
-
   const badge =
     document.getElementById(
       "cart-badge"
@@ -304,8 +268,6 @@ export function refreshCartUI() {
 
   }
 
-  // Drawer total
-
   const drawerTotal =
     document.getElementById(
       "drawer-total-val"
@@ -314,23 +276,17 @@ export function refreshCartUI() {
   if (drawerTotal) {
 
     drawerTotal.textContent =
-      `₹${total}`;
+      `₹${total.toFixed(2)}`;
 
   }
 
-  // Render drawer
-
   renderDrawer();
-
-  // Re-render products
 
   const {
     renderProductGrid
   } = window._freshmart || {};
 
   if (!renderProductGrid) return;
-
-  // Home grid
 
   const hp =
     document.getElementById(
@@ -343,16 +299,11 @@ export function refreshCartUI() {
   ) {
 
     renderProductGrid(
-
       "home-grid",
-
       state.products.slice(0, 12)
-
     );
 
   }
-
-  // Product grid
 
   const pp =
     document.getElementById(
@@ -364,13 +315,7 @@ export function refreshCartUI() {
     pp.innerHTML.includes("prod-body")
   ) {
 
-    renderProductGrid(
-
-      "products-grid",
-
-      state.products
-
-    );
+    
 
   }
 
@@ -382,6 +327,7 @@ export function refreshCartUI() {
 
 export function renderCartPage() {
 
+  
   const panel =
     document.getElementById(
       "cart-items-panel"
@@ -391,8 +337,6 @@ export function renderCartPage() {
 
   const entries =
     Object.entries(state.cart);
-
-  // Empty cart
 
   if (!entries.length) {
 
@@ -412,8 +356,6 @@ export function renderCartPage() {
 
     return;
   }
-
-  // Render items
 
   panel.innerHTML = entries.map(
 
@@ -458,7 +400,7 @@ export function renderCartPage() {
             </div>
 
             <div class="cart-item-price">
-              ₹${p.price * qty}
+              ₹${(p.price * qty).toFixed(2)}
             </div>
 
           </div>
@@ -505,16 +447,15 @@ export function renderCartPage() {
 
   ).join("");
 
-  // Totals
+  // ───────────────── Totals ─────────────────
 
   const total = entries.reduce(
 
     (sum, [id, qty]) => {
 
-      const p =
-        state.products.find(
-          (x) => x.id === id
-        );
+      const p = state.products.find(
+        (x) => x.id === id
+      );
 
       return sum + (
         p
@@ -528,7 +469,280 @@ export function renderCartPage() {
 
   );
 
-  // Update total
+  const mrpTotal = entries.reduce(
+
+    (sum, [id, qty]) => {
+
+      const p = state.products.find(
+        (x) => x.id === id
+      );
+
+      return sum + (
+
+        p
+          ? (p.mrp || p.price) * qty
+          : 0
+
+      );
+
+    },
+
+    0
+
+  );
+
+  const delivery =
+    total >= 499
+      ? 0
+      : 40;
+
+  const productDiscount =
+    mrpTotal - total;
+
+  let promoDiscount = 0;
+
+  if (state.activePromo) {
+
+    const promo =
+      state.activePromo;
+
+    let eligibleTotal = total;
+
+    if (promo.category) {
+
+      eligibleTotal = entries.reduce(
+
+        (sum, [id, qty]) => {
+
+          const p = state.products.find(
+            (x) => x.id === id
+          );
+
+          if (
+            p &&
+            p.category &&
+            p.category.toLowerCase() ===
+            promo.category.toLowerCase()
+          ) {
+
+            return sum + (
+              p.price * qty
+            );
+
+          }
+
+          return sum;
+
+        },
+
+        0
+
+      );
+
+    }
+
+    if (promo.discountPercent) {
+
+      promoDiscount = Math.min(
+
+        (
+          eligibleTotal *
+          promo.discountPercent
+        ) / 100,
+
+        promo.maxDiscount || Infinity
+
+      );
+
+    }
+
+    if (promo.flatDiscount) {
+
+      promoDiscount =
+        promo.flatDiscount;
+
+    }
+
+  }
+
+  const deliveryDiscount =
+    delivery === 0
+      ? 40
+      : 0;
+
+  const totalSavings =
+
+    productDiscount +
+    promoDiscount +
+    deliveryDiscount;
+
+  const finalTotal =
+
+    total +
+    delivery -
+    promoDiscount;
+
+  // ───────────────── Update UI ─────────────────
+
+  const mrpEl =
+    document.getElementById(
+      "sum-mrp"
+    );
+
+  if (mrpEl) {
+
+    mrpEl.textContent =
+      `₹${mrpTotal.toFixed(2)}`;
+
+  }
+
+  const discEl =
+    document.getElementById(
+      "sum-disc"
+    );
+
+  if (discEl) {
+
+    discEl.textContent =
+      `-₹${totalSavings.toFixed(2)}`;
+
+  }
+
+  const detailsEl =
+    document.getElementById(
+      "discount-details"
+    );
+
+  if (detailsEl) {
+
+    let detailsHTML = `
+
+      Product Discount:
+      ₹${productDiscount.toFixed(2)}
+
+    `;
+
+    if (promoDiscount > 0) {
+
+      detailsHTML += `
+
+        <br/><br/>
+
+        Promo Discount:
+        ₹${promoDiscount.toFixed(2)}
+
+      `;
+
+    }
+
+    if (deliveryDiscount > 0) {
+
+      detailsHTML += `
+
+        <br/><br/>
+
+        Free Delivery Saving:
+        ₹${deliveryDiscount.toFixed(2)}
+
+      `;
+
+    }
+
+    detailsHTML += `
+
+      <br/><br/>
+
+      Total Savings:
+      ₹${totalSavings.toFixed(2)}
+
+    `;
+
+    detailsEl.innerHTML =
+      detailsHTML;
+
+  }
+
+  // ───────────────── Coupon UI ─────────────────
+
+const promoBox =
+  document.getElementById(
+    "applied-promo-box"
+  );
+
+const applyBtn =
+  document.getElementById(
+    "apply-promo-btn"
+  );
+
+if (promoBox && applyBtn) {
+
+  if (state.activePromo) {
+
+    // Hide apply button
+
+    applyBtn.style.display =
+      "none";
+
+    promoBox.innerHTML = `
+
+      <div class="applied-promo">
+
+        <div>
+
+          <div class="promo-title">
+            Coupon Applied
+          </div>
+
+          <div class="promo-code">
+            ${state.activePromo.code}
+          </div>
+
+        </div>
+
+        <button
+          class="remove-promo-btn"
+          onclick="removePromo()"
+        >
+          Remove
+        </button>
+
+      </div>
+
+    `;
+
+  }
+
+  else {
+
+    // Show apply button again
+
+    applyBtn.style.display =
+      "block";
+
+    promoBox.innerHTML = "";
+
+  }
+
+}
+
+
+
+
+
+  const delEl =
+    document.getElementById(
+      "sum-del"
+    );
+
+  if (delEl) {
+
+    delEl.textContent =
+
+      delivery === 0
+        ? "FREE"
+        : `₹${delivery.toFixed(2)}`;
+
+  }
 
   const totalEl =
     document.getElementById(
@@ -538,14 +752,14 @@ export function renderCartPage() {
   if (totalEl) {
 
     totalEl.textContent =
-      `₹${total}`;
+      `₹${finalTotal.toFixed(2)}`;
 
   }
 
 }
 
 // ─────────────────────────────────────────
-// Drawer
+// Render Drawer
 // ─────────────────────────────────────────
 
 export function renderDrawer() {
@@ -559,8 +773,6 @@ export function renderDrawer() {
 
   const entries =
     Object.entries(state.cart);
-
-  // Empty cart
 
   if (!entries.length) {
 
@@ -587,8 +799,6 @@ export function renderDrawer() {
 
     return;
   }
-
-  // Render cart
 
   body.innerHTML = entries.map(
 
@@ -633,62 +843,8 @@ export function renderDrawer() {
             </div>
 
             <div class="cart-item-price">
-              ₹${p.price * qty}
+              ₹${(p.price * qty).toFixed(2)}
             </div>
-
-          </div>
-
-          <div
-            class="qty-ctrl"
-            style="
-              flex-direction:column;
-              gap:4px
-            "
-          >
-
-            <div class="qty-ctrl">
-
-              <button
-                class="qty-btn"
-                onclick="
-                  window._changeQty(
-                    '${id}',
-                    -1
-                  )
-                "
-              >
-                −
-              </button>
-
-              <span class="qty-num">
-                ${qty}
-              </span>
-
-              <button
-                class="qty-btn"
-                onclick="
-                  window._changeQty(
-                    '${id}',
-                    1
-                  )
-                "
-              >
-                +
-              </button>
-
-            </div>
-
-            <button
-              class="cart-item-remove"
-              onclick="
-                window._changeQty(
-                  '${id}',
-                  -${qty}
-                )
-              "
-            >
-              🗑️
-            </button>
 
           </div>
 
@@ -739,38 +895,33 @@ export function applyPromo() {
 
   const PROMOS = {
 
-    FRESH20: {
+    FRESH10: {
 
       minOrder: 500,
-
-      discountPercent: 20,
-
+      discountPercent: 10,
       maxDiscount: 150,
+      category: "Fresh Food",
 
       message:
-        "🎉 20% OFF Applied"
+        "🎉 10% OFF Applied"
 
     },
 
-    SAVE100: {
+    SAVE50: {
 
       minOrder: 999,
-
-      flatDiscount: 100,
+      flatDiscount: 50,
 
       message:
-        "🔥 ₹100 OFF Applied"
+        "🔥 ₹50 OFF Applied"
 
     },
 
     VEG30: {
 
       minOrder: 399,
-
       discountPercent: 30,
-
       maxDiscount: 120,
-
       category: "Vegetables",
 
       message:
@@ -795,7 +946,46 @@ export function applyPromo() {
   const promo =
     PROMOS[code];
 
-  // Minimum order
+  // Category validation
+
+  if (promo.category) {
+
+    const cartEntries =
+      Object.entries(state.cart);
+
+    const hasCategoryProduct =
+      cartEntries.some(
+        ([id]) => {
+
+          const p =
+            state.products.find(
+              (x) => x.id === id
+            );
+
+          return (
+            p &&
+            p.category &&
+            p.category.toLowerCase() ===
+            promo.category.toLowerCase()
+          );
+
+        }
+      );
+
+    if (!hasCategoryProduct) {
+
+      showToast(
+        `❌ Promo valid only for ${promo.category}`,
+        "error"
+      );
+
+      return;
+
+    }
+
+  }
+
+  // Minimum order validation
 
   if (
     subtotal <
@@ -827,7 +1017,7 @@ export function applyPromo() {
     promo.message
   );
 
-  // Refresh page
+  // Refresh cart page
 
   if (
     typeof window._renderCartPage ===
@@ -839,3 +1029,68 @@ export function applyPromo() {
   }
 
 }
+
+// ─────────────────────────────────────────
+// Remove Promo
+// ─────────────────────────────────────────
+
+export function removePromo() {
+
+  // Remove active promo
+
+  state.activePromo = null;
+
+  // Clear input
+
+  const input =
+    document.getElementById(
+      "promo-input"
+    );
+
+  if (input) {
+
+    input.value = "";
+
+  }
+
+
+
+  // Remove promo UI
+
+  const appliedBox =
+    document.getElementById(
+      "applied-promo-box"
+    );
+
+  if (appliedBox) {
+
+    appliedBox.innerHTML = "";
+
+  }
+
+  showToast(
+    "Coupon removed"
+  );
+
+  // Refresh totals
+
+  if (
+    typeof window._renderCartPage ===
+    "function"
+  ) {
+
+    window._renderCartPage();
+
+  }
+
+}
+
+// ─────────────────────────────────────────
+// Global Functions
+// ─────────────────────────────────────────
+
+window.applyPromo =
+  applyPromo;
+
+window.removePromo =
+  removePromo;

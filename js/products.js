@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────
-// products.js  —  Fetch, render & filter
+// products.js
 // ─────────────────────────────────────────
 
 import {
@@ -12,11 +12,11 @@ import { state } from "./state.js";
 
 import {
   showPage,
-  getCatEmoji
+  getCatLabel
 } from "./ui.js";
 
 // ─────────────────────────────────────────
-// Fetch products from Firestore
+// Fetch Products
 // ─────────────────────────────────────────
 
 export async function fetchProducts() {
@@ -25,142 +25,178 @@ export async function fetchProducts() {
     collection(db, "products")
   );
 
-  state.products = snap.docs.map((d) => ({
+  state.products = snap.docs.map(
+    (d) => ({
 
-    id: d.id,
+      id: d.id,
 
-    ...d.data()
+      ...d.data()
 
-  }));
+    })
+  );
+
 }
 
 // ─────────────────────────────────────────
-// Load all products
+// Load All Products
 // ─────────────────────────────────────────
 
-export async function loadProducts() {
+export function loadProducts() {
 
-  document.getElementById(
-    "products-grid"
-  ).innerHTML = `
-    <div class="loader">⏳</div>
-  `;
+  showPage(
+    "products-page"
+  );
 
-  await fetchProducts();
+  // REMOVE saved category
+
+  localStorage.removeItem(
+    "activeCategory"
+  );
 
   document.getElementById(
     "products-title"
-  ).textContent = "🛒 All Products";
+  ).textContent =
+    "All Products";
 
   renderProductGrid(
     "products-grid",
     state.products
   );
+
 }
 
 // ─────────────────────────────────────────
-// Home products
+// Home Products
 // ─────────────────────────────────────────
 
-export async function loadHomeProducts() {
-
-  await fetchProducts();
+export function loadHomeProducts() {
 
   renderProductGrid(
     "home-grid",
     state.products.slice(0, 12)
   );
+
 }
 
 // ─────────────────────────────────────────
-// Filter category
+// Filter Category
 // ─────────────────────────────────────────
 
 export function filterCat(cat) {
 
-  showPage("products-page");
+  // OPEN products page
+
+  showPage(
+    "products-page"
+  );
+
+  // Set title
 
   document.getElementById(
     "products-title"
-  ).textContent =
-    `${getCatEmoji(cat)} ${cat}`;
+  ).textContent = cat;
 
-  const filtered = state.products.filter(
+  // Filter products
 
-    (p) =>
+  const filtered =
 
-      p.category &&
-      p.category.toLowerCase() ===
-      cat.toLowerCase()
+    state.products.filter(
+      (p) =>
 
-  );
+        p.category &&
+        p.category.toLowerCase() ===
+        cat.toLowerCase()
+
+    );
+
+  // Render filtered
 
   renderProductGrid(
     "products-grid",
     filtered
   );
+
 }
 
 // ─────────────────────────────────────────
-// Sort products
+// Sort Products
 // ─────────────────────────────────────────
 
 export function sortProducts() {
 
-  const v = document.getElementById(
-    "sort-select"
-  ).value;
+  const v =
 
-  let sorted = [...state.products];
+    document.getElementById(
+      "sort-select"
+    )?.value;
 
-  // Price low → high
+  // IMPORTANT
+
+  let products = [...state.products];
+
+  // GET ACTIVE CATEGORY
+
+  const activeCategory =
+
+    localStorage.getItem(
+      "activeCategory"
+    );
+
+  // FILTER FIRST
+
+  if (activeCategory) {
+
+    products = products.filter(
+      (p) =>
+
+        p.category &&
+        p.category.toLowerCase() ===
+        activeCategory.toLowerCase()
+
+    );
+
+  }
+
+  // SORT
 
   if (v === "price-asc") {
 
-    sorted.sort(
-      (a, b) => a.price - b.price
+    products.sort(
+      (a, b) =>
+        a.price - b.price
     );
 
   }
 
-  // Price high → low
+  else if (
+    v === "price-desc"
+  ) {
 
-  if (v === "price-desc") {
-
-    sorted.sort(
-      (a, b) => b.price - a.price
+    products.sort(
+      (a, b) =>
+        b.price - a.price
     );
 
   }
 
-  // Name A-Z
+  else if (v === "name") {
 
-  if (v === "name") {
-
-    sorted.sort(
-
+    products.sort(
       (a, b) =>
 
-        a.name.localeCompare(b.name)
+        a.name.localeCompare(
+          b.name
+        )
 
-    );
-
-  }
-
-  // Stock high → low
-
-  if (v === "stock") {
-
-    sorted.sort(
-      (a, b) => b.stock - a.stock
     );
 
   }
 
   renderProductGrid(
     "products-grid",
-    sorted
+    products
   );
+
 }
 
 // ─────────────────────────────────────────
@@ -170,8 +206,10 @@ export function sortProducts() {
 export function doSearch() {
 
   const q = document
-    .getElementById("search-input")
-    .value
+    .getElementById(
+      "search-input"
+    )
+    ?.value
     .toLowerCase()
     .trim();
 
@@ -180,44 +218,51 @@ export function doSearch() {
     loadProducts();
 
     return;
+
   }
 
-  showPage("products-page");
+  showPage(
+    "products-page"
+  );
 
   document.getElementById(
     "products-title"
-  ).textContent = `🔍 "${q}"`;
+  ).textContent =
+    `Search: "${q}"`;
 
-  const filtered = state.products.filter(
+  const filtered =
 
-    (p) =>
+    state.products.filter(
 
-      p.name
-        ?.toLowerCase()
-        .includes(q)
+      (p) =>
 
-      ||
+        p.name
+          ?.toLowerCase()
+          .includes(q)
 
-      p.category
-        ?.toLowerCase()
-        .includes(q)
+        ||
 
-      ||
+        p.category
+          ?.toLowerCase()
+          .includes(q)
 
-      p.unit
-        ?.toLowerCase()
-        .includes(q)
+        ||
 
-  );
+        p.unit
+          ?.toLowerCase()
+          .includes(q)
+
+    );
 
   renderProductGrid(
     "products-grid",
     filtered
   );
+
 }
 
 // ─────────────────────────────────────────
-// Render product grid
+// Render Product Grid
 // ─────────────────────────────────────────
 
 export function renderProductGrid(
@@ -226,67 +271,63 @@ export function renderProductGrid(
 ) {
 
   const grid =
-    document.getElementById(gridId);
+
+    document.getElementById(
+      gridId
+    );
 
   if (!grid) return;
 
-  // Empty state
+  // EMPTY
 
   if (!prods.length) {
 
     grid.innerHTML = `
-
       <div style="
         grid-column:1/-1;
         text-align:center;
         padding:60px 20px;
         color:var(--muted);
       ">
-
-        <div style="
-          font-size:55px;
-          margin-bottom:12px;
-        ">
-          🔍
-        </div>
-
         <h3>No products found</h3>
-
-        <p>
-          Try another category or keyword
-        </p>
-
       </div>
-
     `;
 
     return;
+
   }
 
-  // Render cards
+  // PRODUCTS
 
-  grid.innerHTML = prods.map((p) => {
+  grid.innerHTML = prods.map(
+    (p) => {
 
-    const inCart =
-      state.cart[p.id] || 0;
+      const inCart =
+        state.cart[p.id] || 0;
 
-    const inWish =
-      state.wishlist.includes(p.id);
+      const inWish =
+        state.wishlist.includes(
+          p.id
+        );
 
-    const disc =
-      p.mrp > p.price
+      const stock =
+        p.stock ?? 0;
 
-        ? Math.round(
-            (1 - p.price / p.mrp) * 100
-          )
+      const disc =
+        p.mrp > p.price
 
-        : 0;
+          ? Math.round(
+              (
+                1 -
+                p.price / p.mrp
+              ) * 100
+            )
 
-    return `
+          : 0;
+
+      return `
 
       <div class="product-card">
-
-        <!-- Product Image -->
 
         <div class="prod-img">
 
@@ -294,118 +335,55 @@ export function renderProductGrid(
             p.badge
 
               ? `
-
-                <div class="
-                  prod-badge
-                  ${
-                    p.badge === "Fresh"
-                      ? "fresh"
-                      : p.badge === "Offer"
-                      ? "offer"
-                      : ""
-                  }
-                ">
-
+                <div class="prod-badge">
                   ${p.badge}
-
                 </div>
-
               `
 
               : ""
           }
 
-          <!-- Wishlist -->
-
           <button
             class="wishlist-icon ${
-              inWish ? "liked" : ""
+              inWish
+                ? "liked"
+                : ""
             }"
-            onclick="
-              window._toggleWish(
-                event,
-                '${p.id}'
-              )
-            "
+            onclick="window._toggleWish(event,'${p.id}')"
           >
 
             ${
               inWish
-                ? "❤️"
-                : "🤍"
+                ? "♥"
+                : "♡"
             }
 
           </button>
 
-          <!-- Product Photo -->
-
           <img
-
             src="${
-              p.image ||
-              'https://via.placeholder.com/300'
+              p.image
             }"
-
             alt="${p.name}"
-
-            loading="lazy"
-
-            style="
-              width:120px;
-              height:120px;
-              object-fit:cover;
-              border-radius:16px;
-              display:block;
-              margin:auto;
-            "
           />
 
         </div>
 
-        <!-- Product Body -->
-
         <div class="prod-body">
 
-          <!-- Category -->
-
           <div class="prod-category">
-            ${p.category || "General"}
+            ${getCatLabel(
+              p.category
+            )}
           </div>
-
-          <!-- Product Name -->
 
           <div class="prod-name">
             ${p.name}
           </div>
 
-          <!-- Unit -->
-
           <div class="prod-unit">
             ${p.unit || ""}
           </div>
-
-          <!-- Stock -->
-
-          <div style="
-            font-size:12px;
-            color:${
-              p.stock > 0
-                ? '#16a34a'
-                : '#dc2626'
-            };
-            margin-top:4px;
-            font-weight:600;
-          ">
-
-            ${
-              p.stock > 0
-                ? `In Stock (${p.stock})`
-                : `Out of Stock`
-            }
-
-          </div>
-
-          <!-- Price Row -->
 
           <div class="prod-price-row">
 
@@ -417,7 +395,6 @@ export function renderProductGrid(
               p.mrp > p.price
 
                 ? `
-
                   <span class="prod-mrp">
                     ₹${p.mrp}
                   </span>
@@ -425,7 +402,6 @@ export function renderProductGrid(
                   <span class="prod-off">
                     ${disc}% OFF
                   </span>
-
                 `
 
                 : ""
@@ -433,55 +409,24 @@ export function renderProductGrid(
 
           </div>
 
-          <!-- Buttons -->
-
           ${
-            p.stock <= 0
+            inCart === 0
 
               ? `
-
                 <button
                   class="add-btn"
-                  style="
-                    background:#ddd;
-                    cursor:not-allowed;
-                  "
-                  disabled
-                >
-                  Out of Stock
-                </button>
-
-              `
-
-              : inCart === 0
-
-              ? `
-
-                <button
-                  class="add-btn"
-                  onclick="
-                    window._addToCart(
-                      '${p.id}'
-                    )
-                  "
+                  onclick="window._addToCart('${p.id}')"
                 >
                   + Add to Cart
                 </button>
-
               `
 
               : `
-
                 <div class="qty-ctrl">
 
                   <button
                     class="qty-btn"
-                    onclick="
-                      window._changeQty(
-                        '${p.id}',
-                        -1
-                      )
-                    "
+                    onclick="window._changeQty('${p.id}', -1)"
                   >
                     −
                   </button>
@@ -492,18 +437,12 @@ export function renderProductGrid(
 
                   <button
                     class="qty-btn"
-                    onclick="
-                      window._changeQty(
-                        '${p.id}',
-                        1
-                      )
-                    "
+                    onclick="window._changeQty('${p.id}', 1)"
                   >
                     +
                   </button>
 
                 </div>
-
               `
           }
 
@@ -511,7 +450,10 @@ export function renderProductGrid(
 
       </div>
 
-    `;
+      `;
 
-  }).join("");
+    }
+
+  ).join("");
+
 }

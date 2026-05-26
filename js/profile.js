@@ -58,31 +58,155 @@ export async function profileTab(tab) {
       </div>
       <button class="save-btn" onclick="window._saveProfile()">Save Changes</button>`;
 
-  } else if (tab === "wishlist") {
-    const wprods = state.products.filter((p) => state.wishlist.includes(p.id));
-    content.innerHTML = `<h3 style="font-family:'Playfair Display',serif;font-size:20px;margin-bottom:20px">❤️ Wishlist</h3>`;
+  } 
+  
+  else if (tab === "wishlist") {
 
-    if (!wprods.length) {
-      content.innerHTML += `<p style="color:var(--muted)">No items in wishlist yet.</p>`;
-      return;
-    }
+  const wprods = state.products.filter(
+    (p) => state.wishlist.includes(p.id)
+  );
 
-    const grid = document.createElement("div");
-    grid.className = "product-grid";
-    content.appendChild(grid);
-    grid.innerHTML = wprods
-      .map((p) => `
-        <div class="product-card">
-          <div class="prod-img"><span>${p.emoji}</span></div>
-          <div class="prod-body">
-            <div class="prod-name">${p.name}</div>
-            <div class="prod-price-row"><span class="prod-price">₹${p.price}</span></div>
-            <button class="add-btn" onclick="window._addToCart('${p.id}')">+ Add to Cart</button>
+  content.innerHTML = `
+    <h3 style="
+      font-family:'Playfair Display',serif;
+      font-size:20px;
+      margin-bottom:20px
+    ">
+      Wishlist
+    </h3>
+  `;
+
+  // Empty wishlist
+
+  if (!wprods.length) {
+
+    content.innerHTML += `
+      <p style="color:var(--muted)">
+        No items in wishlist yet.
+      </p>
+    `;
+
+    return;
+  }
+
+  const grid = document.createElement("div");
+
+  grid.className = "product-grid";
+
+  content.appendChild(grid);
+
+  grid.innerHTML = wprods.map((p) => {
+
+    const disc =
+      p.mrp > p.price
+        ? Math.round(
+            (1 - p.price / p.mrp) * 100
+          )
+        : 0;
+
+    return `
+
+      <div class="product-card">
+
+        <div class="prod-img">
+
+          ${p.badge ? `
+
+            <div class="
+              prod-badge
+              ${
+                p.badge === "Fresh"
+                  ? "fresh"
+                  : p.badge === "Offer"
+                  ? "offer"
+                  : ""
+              }
+            ">
+              ${p.badge}
+            </div>
+
+          ` : ""}
+
+          <img
+            src="${
+              p.image ||
+              'https://via.placeholder.com/300'
+            }"
+
+            alt="${p.name}"
+
+            loading="lazy"
+
+            style="
+              width:120px;
+              height:120px;
+              object-fit:cover;
+              border-radius:16px;
+              display:block;
+              margin:auto;
+            "
+          />
+
+        </div>
+
+        <div class="prod-body">
+
+          <div class="prod-category">
+            ${p.category || ""}
           </div>
-        </div>`)
-      .join("");
 
-  } else if (tab === "address") {
+          <div class="prod-name">
+            ${p.name}
+          </div>
+
+          <div class="prod-unit">
+            ${p.unit || ""}
+          </div>
+
+          <div class="prod-price-row">
+
+            <span class="prod-price">
+              ₹${p.price}
+            </span>
+
+            ${
+              p.mrp > p.price
+                ? `
+                  <span class="prod-mrp">
+                    ₹${p.mrp}
+                  </span>
+
+                  <span class="prod-off">
+                    ${disc}% OFF
+                  </span>
+                `
+                : ""
+            }
+
+          </div>
+
+          <button
+            class="add-btn"
+            onclick="
+              window._addToCart(
+                '${p.id}'
+              )
+            "
+          >
+            + Add to Cart
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+
+  }).join("");
+}
+  
+  
+  else if (tab === "address") {
     content.innerHTML = `
       <h3 style="font-family:'Playfair Display',serif;font-size:20px;margin-bottom:20px">📍 Saved Addresses</h3>
       <p style="color:var(--muted)">Address management coming soon.</p>`;

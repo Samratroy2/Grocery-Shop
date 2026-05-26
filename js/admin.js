@@ -15,6 +15,7 @@ export async function loadAdmin() {
   adminSection("dashboard");
 }
 
+
 export async function adminSection(sec) {
 
   document
@@ -45,17 +46,15 @@ export async function adminSection(sec) {
 
     main.innerHTML = `
       <h2 style="font-family:'Playfair Display',serif;font-size:24px;margin-bottom:20px">
-        📊 Dashboard Overview
+        Dashboard Overview
       </h2>
 
       <div class="admin-cards">
 
         <div class="admin-card">
           <div class="label">Total Revenue</div>
-          <div class="value">
-            ₹${totalRev.toLocaleString("en-IN")}
-          </div>
-          <div class="trend">↑ All time</div>
+          <div class="value">&#8377;${totalRev.toLocaleString("en-IN")}</div>
+          <div class="trend">All time</div>
         </div>
 
         <div class="admin-card">
@@ -78,9 +77,7 @@ export async function adminSection(sec) {
 
         <div class="admin-card">
           <div class="label">Total Profit</div>
-          <div class="value">
-            ₹${totalProfit.toLocaleString("en-IN")}
-          </div>
+          <div class="value">&#8377;${totalProfit.toLocaleString("en-IN")}</div>
           <div class="trend">Net earnings</div>
         </div>
 
@@ -100,15 +97,12 @@ export async function adminSection(sec) {
           </tr>
 
           ${orderSnap.docs.slice(0, 10).map((d) => {
-
             const o = d.data();
-
             return `
               <tr>
                 <td>#${d.id.slice(-8).toUpperCase()}</td>
                 <td>${o.email || "—"}</td>
-                <td>₹${o.totalAmount}</td>
-
+                <td>&#8377;${o.totalAmount}</td>
                 <td>
                   <span class="status-chip status-confirmed">
                     ${o.deliveryStatus}
@@ -132,7 +126,7 @@ export async function adminSection(sec) {
     main.innerHTML = `
 
       <h2 style="font-family:'Playfair Display',serif;font-size:24px;margin-bottom:20px">
-        ➕ Add Product
+        Add Product
       </h2>
 
       <div class="admin-table">
@@ -146,78 +140,28 @@ export async function adminSection(sec) {
 
           <div class="form-group">
             <label class="form-label">Category</label>
-
             <select class="form-input" id="ap-cat">
-              <option>Vegetables</option>
-                <option>Fruits</option>
-                <option>Grains</option>
-                <option>Rice & Atta</option>
-                <option>Pulses & Dal</option>
-                <option>Snacks</option>
-                <option>Biscuits</option>
-                <option>Namkeen</option>
-                <option>Spices</option>
-                <option>Masala</option>
-                <option>Soft Drinks</option>
-                <option>Juice</option>
-                <option>Tea & Coffee</option>
-                <option>Dairy</option>
-                <option>Milk</option>
-                <option>Curd</option>
-                <option>Paneer</option>
-                <option>Bakery</option>
-                <option>Bread</option>
-                <option>Cakes</option>
-                <option>Oil</option>
-                <option>Ghee</option>
-                <option>Sugar</option>
-                <option>Salt</option>
-                <option>Soap</option>
-                <option>Shampoo</option>
-                <option>Hair Oil</option>
-                <option>Toothpaste</option>
-                <option>Detergent</option>
-                <option>Cleaning Items</option>
-                <option>Bathroom Cleaner</option>
-                <option>Floor Cleaner</option>
-                <option>Cow Food</option>
-                <option>Animal Feed</option>
-                <option>Cement</option>
-                <option>Rod</option>
-                <option>Paint</option>
-                <option>Hardware</option>
-                <option>Electrical</option>
-                <option>Pipe & Plumbing</option>
-                <option>Kitchen Items</option>
-                <option>Plastic Items</option>
-                <option>Stationery</option>
-                <option>Baby Care</option>
-                <option>Personal Care</option>
-                <option>Frozen Food</option>
-                <option>Dry Fruits</option>
-                <option>Pickles</option>
-                <option>Sauces</option>
-                <option>Noodles</option>
-                <option>Ready to Eat</option>
-                <option>Ice Cream</option>
-                <option>Pet Food</option>
-                <option>Mobile Accessories</option>
-                <option>Other</option>
+              <option>Fresh Food</option>
+              <option>Packaged &amp; Dry Foods</option>
+              <option>Beverages</option>
+              <option>Household Essentials</option>
+              <option>Baby &amp; Personal Care</option>
+              <option>Other Common Items</option>
             </select>
           </div>
 
           <div class="form-group">
-            <label class="form-label">Selling Price (₹)</label>
+            <label class="form-label">Selling Price (&#8377;)</label>
             <input class="form-input" id="ap-price" type="number"/>
           </div>
 
           <div class="form-group">
-            <label class="form-label">Buy Price (₹)</label>
+            <label class="form-label">Buy Price (&#8377;)</label>
             <input class="form-input" id="ap-buy-price" type="number"/>
           </div>
 
           <div class="form-group">
-            <label class="form-label">MRP (₹)</label>
+            <label class="form-label">MRP (&#8377;)</label>
             <input class="form-input" id="ap-mrp" type="number"/>
           </div>
 
@@ -228,11 +172,7 @@ export async function adminSection(sec) {
 
           <div class="form-group">
             <label class="form-label">Product Image URL</label>
-            <input
-              class="form-input"
-              id="ap-image"
-              placeholder="https://example.com/image.png"
-            />
+            <input class="form-input" id="ap-image" placeholder="https://example.com/image.png"/>
           </div>
 
           <div class="form-group">
@@ -268,7 +208,7 @@ export async function adminSection(sec) {
     main.innerHTML = `
 
       <h2 style="font-family:'Playfair Display',serif;font-size:24px;margin-bottom:20px">
-        📦 Manage Products
+        Manage Products
       </h2>
 
       <div class="admin-table">
@@ -287,22 +227,14 @@ export async function adminSection(sec) {
           </tr>
 
           ${snap.docs.map((d) => {
-
             const p = d.data();
-
             return `
-
               <tr>
 
                 <td>
                   <img
                     src="${p.image || 'https://via.placeholder.com/50'}"
-                    style="
-                      width:50px;
-                      height:50px;
-                      object-fit:cover;
-                      border-radius:10px;
-                    "
+                    style="width:50px;height:50px;object-fit:cover;border-radius:10px;"
                   />
                 </td>
 
@@ -311,39 +243,19 @@ export async function adminSection(sec) {
                 <td>${p.category}</td>
 
                 <td>
-                  <input
-                    type="number"
-                    value="${p.price}"
-                    id="price-${d.id}"
-                    style="width:90px"
-                  />
+                  <input type="number" value="${p.price}" id="price-${d.id}" style="width:90px"/>
                 </td>
 
                 <td>
-                  <input
-                    type="number"
-                    value="${p.mrp || p.price}"
-                    id="mrp-${d.id}"
-                    style="width:90px"
-                  />
+                  <input type="number" value="${p.mrp || p.price}" id="mrp-${d.id}" style="width:90px"/>
                 </td>
 
                 <td>
-                  <input
-                    type="number"
-                    value="${p.buyPrice || 0}"
-                    id="buy-${d.id}"
-                    style="width:90px"
-                  />
+                  <input type="number" value="${p.buyPrice || 0}" id="buy-${d.id}" style="width:90px"/>
                 </td>
 
                 <td>
-                  <input
-                    type="number"
-                    value="${p.stock}"
-                    id="stock-${d.id}"
-                    style="width:80px"
-                  />
+                  <input type="number" value="${p.stock}" id="stock-${d.id}" style="width:80px"/>
                 </td>
 
                 <td style="display:flex;gap:8px">
@@ -365,7 +277,6 @@ export async function adminSection(sec) {
                 </td>
 
               </tr>
-
             `;
           }).join("")}
 
@@ -386,7 +297,7 @@ export async function adminSection(sec) {
     main.innerHTML = `
 
       <h2 style="font-family:'Playfair Display',serif;font-size:24px;margin-bottom:20px">
-        🛒 All Orders
+        All Orders
       </h2>
 
       <div class="admin-table">
@@ -405,9 +316,7 @@ export async function adminSection(sec) {
           </tr>
 
           ${snap.docs.map((d) => {
-
             const o = d.data();
-
             const sc = {
               Delivered: "status-delivered",
               Confirmed: "status-confirmed",
@@ -419,113 +328,43 @@ export async function adminSection(sec) {
 
                 <td>#${d.id.slice(-8).toUpperCase()}</td>
 
-                <td style="font-size:12px">
-                  ${o.email}
+                <td style="font-size:12px">${o.email}</td>
+
+                <td>&#8377;${o.totalAmount}</td>
+
+                <td style="color:green;font-weight:600">&#8377;${o.profit || 0}</td>
+
+                <td>
+                  <span class="status-chip status-confirmed">${o.paymentStatus}</span>
                 </td>
 
                 <td>
-                  ₹${o.totalAmount}
-                </td>
-
-                <td style="color:green;font-weight:600">
-                  ₹${o.profit || 0}
+                  <select
+                    onchange="window._adminUpdatePayment('${d.id}', this.value)"
+                    style="font-size:12px;padding:4px;border:1px solid var(--border);border-radius:4px"
+                  >
+                    <option value="Pending" ${o.paymentStatus === "Pending" ? "selected" : ""}>Pending</option>
+                    <option value="Paid" ${o.paymentStatus === "Paid" ? "selected" : ""}>Paid</option>
+                    <option value="Failed" ${o.paymentStatus === "Failed" ? "selected" : ""}>Failed</option>
+                  </select>
                 </td>
 
                 <td>
-  <span class="status-chip status-confirmed">
-    ${o.paymentStatus}
-  </span>
-</td>
+                  <span class="status-chip ${sc}">${o.deliveryStatus}</span>
+                </td>
 
-<td>
+                <td>
+                  <select
+                    onchange="window._adminUpdateOrder('${d.id}', this.value)"
+                    style="font-size:12px;padding:4px;border:1px solid var(--border);border-radius:4px"
+                  >
+                    <option ${o.deliveryStatus === "Confirmed" ? "selected" : ""}>Confirmed</option>
+                    <option ${o.deliveryStatus === "Out for Delivery" ? "selected" : ""}>Out for Delivery</option>
+                    <option ${o.deliveryStatus === "Delivered" ? "selected" : ""}>Delivered</option>
+                    <option ${o.deliveryStatus === "Cancelled" ? "selected" : ""}>Cancelled</option>
+                  </select>
+                </td>
 
-  <select
-    onchange="
-      window._adminUpdatePayment(
-        '${d.id}',
-        this.value
-      )
-    "
-    style="
-      font-size:12px;
-      padding:4px;
-      border:1px solid var(--border);
-      border-radius:4px
-    "
-  >
-
-    <option value="Pending"
-      ${o.paymentStatus === "Pending" ? "selected" : ""}
-    >
-      Pending
-    </option>
-
-    <option value="Paid"
-      ${o.paymentStatus === "Paid" ? "selected" : ""}
-    >
-      Paid
-    </option>
-
-    <option value="Failed"
-      ${o.paymentStatus === "Failed" ? "selected" : ""}
-    >
-      Failed
-    </option>
-
-  </select>
-
-</td>
-
-<td>
-  <span class="status-chip ${sc}">
-    ${o.deliveryStatus}
-  </span>
-</td>
-
-<td>
-
-  <select
-    onchange="
-      window._adminUpdateOrder(
-        '${d.id}',
-        this.value
-      )
-    "
-    style="
-      font-size:12px;
-      padding:4px;
-      border:1px solid var(--border);
-      border-radius:4px
-    "
-  >
-
-    <option
-      ${o.deliveryStatus === "Confirmed" ? "selected" : ""}
-    >
-      Confirmed
-    </option>
-
-    <option
-      ${o.deliveryStatus === "Out for Delivery" ? "selected" : ""}
-    >
-      Out for Delivery
-    </option>
-
-    <option
-      ${o.deliveryStatus === "Delivered" ? "selected" : ""}
-    >
-      Delivered
-    </option>
-
-    <option
-      ${o.deliveryStatus === "Cancelled" ? "selected" : ""}
-    >
-      Cancelled
-    </option>
-
-  </select>
-
-</td>
               </tr>
             `;
           }).join("")}
@@ -545,7 +384,7 @@ export async function adminSection(sec) {
     main.innerHTML = `
 
       <h2 style="font-family:'Playfair Display',serif;font-size:24px;margin-bottom:20px">
-        👥 Customers
+        Customers
       </h2>
 
       <div class="admin-table">
@@ -560,28 +399,17 @@ export async function adminSection(sec) {
           </tr>
 
           ${snap.docs.map((d) => {
-
             const u = d.data();
-
             return `
               <tr>
-
                 <td>${u.name || "—"}</td>
-
                 <td>${u.email}</td>
-
                 <td>${u.city || "—"}</td>
-
                 <td>
-                  <span class="status-chip ${
-                    u.role === "admin"
-                      ? "status-confirmed"
-                      : "status-delivered"
-                  }">
+                  <span class="status-chip ${u.role === "admin" ? "status-confirmed" : "status-delivered"}">
                     ${u.role || "user"}
                   </span>
                 </td>
-
               </tr>
             `;
           }).join("")}
@@ -598,25 +426,15 @@ export async function adminSection(sec) {
 export async function adminAddProduct() {
 
   const p = {
-
-    name: document.getElementById("ap-name").value,
-
-    category: document.getElementById("ap-cat").value,
-
-    price: +document.getElementById("ap-price").value,
-
-    buyPrice: +document.getElementById("ap-buy-price").value,
-
-    mrp: +document.getElementById("ap-mrp").value,
-
-    unit: document.getElementById("ap-unit").value,
-
-    image: document.getElementById("ap-image").value,
-
-    stock: +document.getElementById("ap-stock").value,
-
-    badge: document.getElementById("ap-badge").value,
-
+    name:      document.getElementById("ap-name").value,
+    category:  document.getElementById("ap-cat").value,
+    price:     +document.getElementById("ap-price").value,
+    buyPrice:  +document.getElementById("ap-buy-price").value,
+    mrp:       +document.getElementById("ap-mrp").value,
+    unit:      document.getElementById("ap-unit").value,
+    image:     document.getElementById("ap-image").value,
+    stock:     +document.getElementById("ap-stock").value,
+    badge:     document.getElementById("ap-badge").value,
     createdAt: serverTimestamp(),
   };
 
@@ -626,11 +444,8 @@ export async function adminAddProduct() {
   }
 
   await addDoc(collection(db, "products"), p);
-
   await fetchProducts();
-
-  showToast("✅ Product added!");
-
+  showToast("Product added!");
   adminSection("manage-products");
 }
 
@@ -638,25 +453,14 @@ export async function adminAddProduct() {
 
 export async function adminUpdateProduct(id) {
 
-  const price = +document.getElementById(`price-${id}`).value;
-
-  const mrp = +document.getElementById(`mrp-${id}`).value;
-
+  const price    = +document.getElementById(`price-${id}`).value;
+  const mrp      = +document.getElementById(`mrp-${id}`).value;
   const buyPrice = +document.getElementById(`buy-${id}`).value;
+  const stock    = +document.getElementById(`stock-${id}`).value;
 
-  const stock = +document.getElementById(`stock-${id}`).value;
-
-  await updateDoc(doc(db, "products", id), {
-    price,
-    mrp,
-    buyPrice,
-    stock
-  });
-
+  await updateDoc(doc(db, "products", id), { price, mrp, buyPrice, stock });
   await fetchProducts();
-
-  showToast("✅ Product updated");
-
+  showToast("Product updated");
   adminSection("manage-products");
 }
 
@@ -667,11 +471,8 @@ export async function adminDeleteProduct(id) {
   if (!confirm("Delete this product?")) return;
 
   await deleteDoc(doc(db, "products", id));
-
   await fetchProducts();
-
-  showToast("🗑️ Product deleted");
-
+  showToast("Product deleted");
   adminSection("manage-products");
 }
 
@@ -679,27 +480,14 @@ export async function adminDeleteProduct(id) {
 
 export async function adminUpdateOrder(id, status) {
 
-  await updateDoc(doc(db, "orders", id), {
-    deliveryStatus: status
-  });
-
-  showToast(`✅ Order updated: ${status}`);
+  await updateDoc(doc(db, "orders", id), { deliveryStatus: status });
+  showToast(`Order updated: ${status}`);
 }
-
 
 // ───────────────── Update Payment ─────────────────
 
 export async function adminUpdatePayment(id, status) {
 
-  await updateDoc(
-    doc(db, "orders", id),
-    {
-      paymentStatus: status
-    }
-  );
-
-  showToast(
-    `💵 Payment updated: ${status}`
-  );
-
+  await updateDoc(doc(db, "orders", id), { paymentStatus: status });
+  showToast(`Payment updated: ${status}`);
 }

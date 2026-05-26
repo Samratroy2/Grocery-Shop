@@ -1,54 +1,100 @@
 /* ─────────────────────────────────────────
-   variables.css  —  Design tokens & reset
+   variables.css — Design tokens
    ───────────────────────────────────────── */
 
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
+
 :root {
-  /* Brand Colors */
-  --green:        #1a7a4a;
-  --green-light:  #23a460;
-  --green-dark:   #0f5233;
-
-  /* Accent */
+  /* Brand */
+  --green:        #16a34a;
+  --green-dark:   #15803d;
+  --green-xdark:  #14532d;
+  --green-light:  #dcfce7;
+  --green-faint:  #f0fdf4;
+  --red:          #dc2626;
   --amber:        #f59e0b;
-  --amber-light:  #fcd34d;
+  --blue:         #1d4ed8;
 
-  /* Status */
-  --red:          #ef4444;
-  --blue:         #3b82f6;
-
-  /* Surface */
-  --bg:           #f7f9f5;
-  --white:        #ffffff;
+  /* Surfaces */
+  --bg:           #f5f6f8;
   --card:         #ffffff;
+  --card-hover:   #fafbfc;
+  --sidebar-bg:   #0f172a;
 
-  /* Typography */
-  --text:         #1c2614;
-  --muted:        #6b7c61;
+  /* Text */
+  --text:         #0f172a;
+  --text-2:       #475569;
+  --muted:        #94a3b8;
 
-  /* Border */
-  --border:       #dde8d5;
+  /* Borders */
+  --border:       #e2e8f0;
+  --border-focus: var(--green);
 
-  /* Shadows */
-  --shadow:       0 2px 12px rgba(26, 122, 74, 0.08);
-  --shadow-hover: 0 8px 32px rgba(26, 122, 74, 0.18);
+  /* Elevation */
+  --shadow-sm:    0 1px 2px rgba(0,0,0,.05);
+  --shadow:       0 1px 3px rgba(0,0,0,.07), 0 6px 20px rgba(0,0,0,.05);
+  --shadow-lg:    0 4px 6px rgba(0,0,0,.07), 0 16px 48px rgba(0,0,0,.1);
 
   /* Radius */
-  --radius:    12px;
-  --radius-sm:  8px;
+  --r-sm:         8px;
+  --r:            14px;
+  --r-lg:         20px;
+  --r-xl:         28px;
+
+  /* Type */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'DM Sans', system-ui, sans-serif;
+
+  /* Layout */
+  --nav-height:   108px;
+  --max-w:        1400px;
+  --page-pad:     28px;
 }
 
 /* ── Reset ── */
-*,
-*::before,
-*::after {
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+html { scroll-behavior: smooth; }
+
 body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
+  font-family: var(--font-body);
+  background:  var(--bg);
+  color:       var(--text);
+  min-height:  100vh;
+  -webkit-font-smoothing: antialiased;
 }
+
+img { display: block; max-width: 100%; }
+
+button { font-family: var(--font-body); cursor: pointer; }
+
+input, select, textarea { font-family: var(--font-body); }
+
+a { text-decoration: none; color: inherit; }
+
+/* ── Utility ── */
+.loader {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 64px 20px;
+  color: var(--muted);
+  font-size: 14px;
+  letter-spacing: .02em;
+}
+
+.status-chip {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+}
+.status-confirmed { background: var(--green-light); color: var(--green-xdark); }
+.status-delivered { background: #dbeafe;            color: #1e40af; }
+.status-pending   { background: #fef3c7;            color: #92400e; }

@@ -13,7 +13,7 @@ import {
 
 import {
   fetchProducts,
-  loadProducts,
+  loadProducts as productsLoadProducts,
   loadHomeProducts,
   filterCat,
   sortProducts,
@@ -64,7 +64,7 @@ import {
 } from "./admin.js";
 
 // ─────────────────────────────────────────
-// Shared render fn for cross-module use
+// Shared render fn
 // ─────────────────────────────────────────
 
 window._freshmart = {
@@ -73,101 +73,289 @@ window._freshmart = {
 
 // ─────────────────────────────────────────
 // Global bridge functions
-// Used inside inline onclick HTML
 // ─────────────────────────────────────────
 
 // Cart
-window._addToCart = addToCart;
-window._changeQty = changeQty;
-window._renderCartPage = renderCartPage;
+
+window._addToCart =
+  addToCart;
+
+window._changeQty =
+  changeQty;
+
+window._renderCartPage =
+  renderCartPage;
 
 // Wishlist
-window._toggleWish = toggleWish;
+
+window._toggleWish =
+  toggleWish;
 
 // Auth
-window._openAuth = openAuth;
-window._toggleAuthMode = toggleAuthMode;
+
+window._openAuth =
+  openAuth;
+
+window._toggleAuthMode =
+  toggleAuthMode;
 
 // Profile
-window._loadProfile = loadProfile;
-window._saveProfile = saveProfile;
+
+window._loadProfile =
+  loadProfile;
+
+window._saveProfile =
+  saveProfile;
 
 // Admin
-window._adminAddProduct = adminAddProduct;
 
-window._adminDeleteProduct = adminDeleteProduct;
+window._adminAddProduct =
+  adminAddProduct;
 
-window._adminUpdateProduct = adminUpdateProduct;
+window._adminDeleteProduct =
+  adminDeleteProduct;
 
-window._adminUpdateOrder = adminUpdateOrder;
+window._adminUpdateProduct =
+  adminUpdateProduct;
 
-window._adminUpdatePayment =adminUpdatePayment;
+window._adminUpdateOrder =
+  adminUpdateOrder;
+
+window._adminUpdatePayment =
+  adminUpdatePayment;
 
 // ─────────────────────────────────────────
-// Expose functions to HTML
+// Active Navbar
 // ─────────────────────────────────────────
 
-window.showPage = showPage;
+window.setActiveNav = (label) => {
 
-window.goHome = () => {
+  document
+    .querySelectorAll(
+      ".nav-cat-btn"
+    )
+    .forEach((btn) => {
 
-  showPage("home-page");
+      btn.classList.remove(
+        "active"
+      );
 
-  loadHomeProducts();
+      if (
+        btn.textContent.trim() ===
+        label
+      ) {
+
+        btn.classList.add(
+          "active"
+        );
+
+      }
+
+    });
 
 };
 
-window.filterCat = filterCat;
+// ─────────────────────────────────────────
+// Page Navigation
+// ─────────────────────────────────────────
 
-window.loadProducts = loadProducts;
+window.showPage = (pageId) => {
 
-window.sortProducts = sortProducts;
+  // Save active page
 
-window.doSearch = doSearch;
+  localStorage.setItem(
+    "activePage",
+    pageId
+  );
 
-window.openAuth = openAuth;
+  // Open page
 
-window.closeAuth = closeAuth;
+  showPage(pageId);
 
-window.handleAuth = handleAuth;
+};
 
-window.signOut = signOut;
+// ─────────────────────────────────────────
+// Home
+// ─────────────────────────────────────────
 
-window.openDrawer = openDrawer;
+window.goHome = () => {
 
-window.closeDrawer = closeDrawer;
+  localStorage.removeItem(
+    "activeCategory"
+  );
 
-window.renderCartPage = renderCartPage;
+  window.showPage(
+    "home-page"
+  );
 
-window.applyPromo = applyPromo;
+  loadHomeProducts();
 
-window.placeOrder = placeOrder;
+  setActiveNav(
+    "Home"
+  );
 
-window.loadOrders = loadOrders;
+};
 
-window.profileTab = profileTab;
+// ─────────────────────────────────────────
+// Products
+// ─────────────────────────────────────────
 
-window.loadAdmin = loadAdmin;
+window.filterCat = (cat) => {
 
-window.adminSection = adminSection;
+  // Save category
 
-window.showToast = showToast;
+  localStorage.setItem(
+    "activeCategory",
+    cat
+  );
+
+  // Save page
+
+  localStorage.setItem(
+    "activePage",
+    "products-page"
+  );
+
+  // ONLY call products.js filterCat
+
+  filterCat(cat);
+
+  // Active nav
+
+  setActiveNav(cat);
+
+};
+
+// ─────────────────────────────────────────
+// Auth
+// ─────────────────────────────────────────
+
+window.openAuth =
+  openAuth;
+
+window.closeAuth =
+  closeAuth;
+
+window.handleAuth =
+  handleAuth;
+
+window.signOut =
+  signOut;
+
+// ─────────────────────────────────────────
+// Cart
+// ─────────────────────────────────────────
+
+window.openDrawer =
+  openDrawer;
+
+window.closeDrawer =
+  closeDrawer;
+
+window.renderCartPage = () => {
+
+  localStorage.setItem(
+    "activePage",
+    "cart-page"
+  );
+
+  showPage(
+    "cart-page"
+  );
+
+  renderCartPage();
+
+  setActiveNav("");
+
+};
+
+window.applyPromo =
+  applyPromo;
+
+// ─────────────────────────────────────────
+// Orders
+// ─────────────────────────────────────────
+
+window.placeOrder =
+  placeOrder;
+
+window.loadOrders = () => {
+
+  localStorage.setItem(
+    "activePage",
+    "orders-page"
+  );
+
+  showPage(
+    "orders-page"
+  );
+
+  loadOrders();
+
+  setActiveNav(
+    "My Orders"
+  );
+
+};
+
+// ─────────────────────────────────────────
+// Profile
+// ─────────────────────────────────────────
+
+window.profileTab =
+  profileTab;
+
+// ─────────────────────────────────────────
+// Admin
+// ─────────────────────────────────────────
+
+window.loadAdmin = () => {
+
+  localStorage.setItem(
+    "activePage",
+    "admin-page"
+  );
+
+  showPage(
+    "admin-page"
+  );
+
+  loadAdmin();
+
+  setActiveNav(
+    "Admin"
+  );
+
+};
+
+window.adminSection =
+  adminSection;
+
+window.showToast =
+  showToast;
 
 // ─────────────────────────────────────────
 // Search Enter Key
 // ─────────────────────────────────────────
 
 document
-  .getElementById("search-input")
-  ?.addEventListener("keyup", (e) => {
+  .getElementById(
+    "search-input"
+  )
+  ?.addEventListener(
+    "keyup",
+    (e) => {
 
-    if (e.key === "Enter") {
+      if (
+        e.key === "Enter"
+      ) {
 
-      doSearch();
+        doSearch();
+
+      }
 
     }
-
-  });
+  );
 
 // ─────────────────────────────────────────
 // App Init
@@ -175,23 +363,216 @@ document
 
 (async () => {
 
-  // Firebase auth listener
+  // Auth listener
 
   initAuthListener();
 
-  // Load products from firestore
+  // Fetch products
 
   await fetchProducts();
 
-  // Render home products
+  // Restore page
 
-  renderProductGrid(
-    "home-grid",
-    state.products.slice(0, 8)
-  );
+  const savedPage =
 
-  // Refresh cart badge + totals
+    localStorage.getItem(
+      "activePage"
+    ) || "home-page";
+
+  // Restore category
+
+  const savedCategory =
+
+    localStorage.getItem(
+      "activeCategory"
+    );
+
+  // Open saved page
+
+  showPage(savedPage);
+
+  // ───────────────── HOME
+
+  if (
+    savedPage ===
+    "home-page"
+  ) {
+
+    loadHomeProducts();
+
+    setActiveNav(
+      "Home"
+    );
+
+  }
+
+  // ───────────────── PRODUCTS
+
+  else if (
+    savedPage ===
+    "products-page"
+  ) {
+
+    // Restore category
+
+    if (
+      savedCategory
+    ) {
+
+      document.getElementById(
+        "products-title"
+      ).textContent =
+        savedCategory;
+
+      const filtered =
+
+        state.products.filter(
+          (p) =>
+
+            p.category &&
+            p.category.toLowerCase() ===
+            savedCategory.toLowerCase()
+
+        );
+
+      renderProductGrid(
+        "products-grid",
+        filtered
+      );
+
+      setActiveNav(
+        savedCategory
+      );
+
+    }
+
+    // Restore all products
+
+    else {
+
+      document.getElementById(
+        "products-title"
+      ).textContent =
+        "All Products";
+
+      renderProductGrid(
+        "products-grid",
+        state.products
+      );
+
+      setActiveNav(
+        "All Products"
+      );
+
+    }
+
+  }
+
+  // ───────────────── CART
+
+  else if (
+    savedPage ===
+    "cart-page"
+  ) {
+
+    renderCartPage();
+
+  }
+
+  // ───────────────── ORDERS
+
+  else if (
+    savedPage ===
+    "orders-page"
+  ) {
+
+    loadOrders();
+
+    setActiveNav(
+      "My Orders"
+    );
+
+  }
+
+  // ───────────────── ADMIN
+
+  else if (
+    savedPage ===
+    "admin-page"
+  ) {
+
+    loadAdmin();
+
+    setActiveNav(
+      "Admin"
+    );
+
+  }
+
+  // Refresh cart
 
   refreshCartUI();
 
 })();
+
+// ─────────────────────────────────────────
+// Discount Toggle
+// ─────────────────────────────────────────
+
+window.toggleDiscountDetails = () => {
+
+  const box =
+
+    document.getElementById(
+      "discount-details"
+    );
+
+  if (!box) return;
+
+  box.style.display =
+
+    box.style.display ===
+    "none"
+
+      ? "block"
+
+      : "none";
+
+};
+
+// ─────────────────────────────────────────
+// All Products
+// ─────────────────────────────────────────
+
+window.loadProducts = () => {
+
+  // Remove category filter
+
+  localStorage.removeItem(
+    "activeCategory"
+  );
+
+  // Save active page
+
+  localStorage.setItem(
+    "activePage",
+    "products-page"
+  );
+
+  // Open products page
+
+  showPage(
+    "products-page"
+  );
+
+  // Load all products
+
+  productsLoadProducts();
+
+  // Active navbar
+
+  setActiveNav(
+    "All Products"
+  );
+
+};
